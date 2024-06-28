@@ -22,6 +22,10 @@ const config = {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
+      backgroundSize: {
+        // i.e. bg-full
+        full: "100%",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
