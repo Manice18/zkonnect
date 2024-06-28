@@ -20,6 +20,7 @@ import {
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
+
 import { DEFAULT_SOL_ADDRESS, DEFAULT_SOL_AMOUNT } from "./const";
 
 export const GET = async (req: Request) => {
@@ -29,7 +30,7 @@ export const GET = async (req: Request) => {
 
     const baseHref = new URL(
       `/api/actions/transfer-sol?to=${toPubkey.toBase58()}`,
-      requestUrl.origin
+      requestUrl.origin,
     ).toString();
 
     const payload: ActionGetResponse = {
@@ -103,12 +104,12 @@ export const POST = async (req: Request) => {
     }
 
     const connection = new Connection(
-      process.env.SOLANA_RPC! || clusterApiUrl("devnet")
+      process.env.SOLANA_RPC! || clusterApiUrl("devnet"),
     );
 
     // ensure the receiving account will be rent exempt
     const minimumBalance = await connection.getMinimumBalanceForRentExemption(
-      0 // note: simple accounts that just store native SOL have `0` bytes of data
+      0, // note: simple accounts that just store native SOL have `0` bytes of data
     );
     if (amount * LAMPORTS_PER_SOL < minimumBalance) {
       throw `account may not be rent exempt: ${toPubkey.toBase58()}`;
@@ -122,7 +123,7 @@ export const POST = async (req: Request) => {
         fromPubkey: account,
         toPubkey: toPubkey,
         lamports: amount * LAMPORTS_PER_SOL,
-      })
+      }),
     );
 
     // set the end user as the fee payer
