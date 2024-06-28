@@ -14,3 +14,28 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  creatorName       String
+  walletAddress     String   @unique
+  domainOfExpertise String
+  eventsInaYear     Int
+  noOfFollowers     Int
+  Events            Events[]
+}
+
+model Events {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  eventName     String
+  eventDateTo   DateTime
+  eventDateFrom DateTime
+  ticketPrice   Float
+  eventStatus   String
+  meetLink      String
+  blink         String
+  eventDesc     String
+  eventBanner   String
+  eventCreator  User     @relation(fields: [creatorId], references: [id])
+  creatorId     String   @db.ObjectId
+}
