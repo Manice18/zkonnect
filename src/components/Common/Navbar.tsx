@@ -6,8 +6,16 @@ import Logo from "@/components/Common/Logo";
 import { useScrollTop } from "@/hooks/use-scroll-top";
 import { cn } from "@/lib/utils";
 import WalletConnectButton from "@/components/Wallet/wallet-connect-button";
+import Link from "next/link";
+import Logo from "./Logo";
 
-const Navbar = ({ requireLogin = true }: { requireLogin?: boolean }) => {
+const Navbar = ({
+  requireLogin = true,
+  requireLogo,
+}: {
+  requireLogin?: boolean;
+  requireLogo?: boolean;
+}) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState(false);
@@ -36,6 +44,9 @@ const Navbar = ({ requireLogin = true }: { requireLogin?: boolean }) => {
       ref={menuRef}
     >
       <div className="mx-auto flex w-full max-w-[1600px]">
+        <Link href="/" className={`${requireLogo ? "block" : "hidden"}`}>
+          <Logo />
+        </Link>
         <div className="flex w-full items-center justify-end gap-x-2 md:ml-auto">
           {requireLogin && <WalletConnectButton />}
           {/* <WalletMultiButton className="!bg-zkonnect-purple-origin !rounded-lg transition-all duration-200 hover:!bg-black" /> */}
