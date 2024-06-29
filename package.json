@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/dialogflow": "^6.7.0",
     "@google-cloud/dialogflow-cx": "^4.7.0",
     "@huddle01/react": "^2.0.16",
     "@huddle01/server-sdk": "^2.2.2",
@@ -38,6 +39,7 @@
     "clsx": "^2.1.1",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.399.0",
+    "net": "^1.0.2",
     "next": "14.2.4",
     "pino-pretty": "^11.2.1",
     "prisma": "^5.16.1",
