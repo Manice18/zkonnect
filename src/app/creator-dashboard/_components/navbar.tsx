@@ -35,6 +35,9 @@ const Navbar = ({ requireLogin = true }: { requireLogin?: boolean }) => {
       )}
       ref={menuRef}
     >
+      <div className="mt-4">
+        <Logo classname="h-12 w-20" />
+      </div>
       <div className="mx-auto flex w-full max-w-[1600px]">
         <div className="flex w-full items-center justify-end gap-x-2 md:ml-auto">
           {requireLogin && <WalletConnectButton />}
