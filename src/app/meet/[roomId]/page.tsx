@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 
 type TPeerMetadata = {
   displayName: string;
@@ -151,14 +152,14 @@ export default function Page() {
                   peerId ? <RemotePeer key={peerId} peerId={peerId} /> : null,
                 )}
               </div>
-              <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white lg:static lg:h-auto lg:w-auto lg:bg-none">
+              <div className="fixed bottom-0 left-0 z-10 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white lg:static lg:h-auto lg:w-auto lg:bg-none">
                 {state === "idle" && (
                   <>
-                    <input
+                    <Input
                       disabled={state !== "idle"}
-                      placeholder="Display Name"
+                      placeholder="Your Display Name"
                       type="text"
-                      className="mx-2 rounded-lg border-2 border-slate-400 bg-black p-2 text-white"
+                      className="mx-2 p-2 text-black"
                       value={displayName}
                       onChange={(event) => setDisplayName(event.target.value)}
                     />
