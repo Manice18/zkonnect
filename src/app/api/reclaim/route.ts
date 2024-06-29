@@ -2,7 +2,6 @@ import { NextRequest } from "next/server";
 
 import { Reclaim } from "@reclaimprotocol/js-sdk";
 
-import { produceJWTSecret } from "@/lib/jwt";
 import PROVIDERS from "@/lib/reclaim/providers";
 
 export async function GET(req: NextRequest) {
@@ -23,7 +22,7 @@ export async function GET(req: NextRequest) {
   const data = {
     requestUrl: "",
     verified: false,
-    jwt: "",
+    followers: "",
   };
   let controller: ReadableStreamDefaultController;
   const dataStream = new ReadableStream({
@@ -33,8 +32,6 @@ export async function GET(req: NextRequest) {
         const encoder = new TextEncoder();
         const { requestUrl, statusUrl } =
           await reclaimClient.createVerificationRequest();
-        console.log("requrest url: ", requestUrl);
-        console.log("status url: ", statusUrl);
 
         data.requestUrl = requestUrl;
 
@@ -43,9 +40,14 @@ export async function GET(req: NextRequest) {
         await reclaimClient.startSession({
           onSuccessCallback: async (proofs) => {
             data.verified = await Reclaim.verifySignedProof(proofs[0]);
-            if (data.verified) {
-              console.log(data);
-              data.jwt = produceJWTSecret({ identifier: proofs[0].identifier });
+
+            data.followers = JSON.parse(
+              proofs[0].claimData.parameters,
+            ).paramValues.followers;
+            if (data.verified === true) {
+              data.followers = JSON.parse(
+                proofs[0].claimData.parameters,
+              ).paramValues.followers;
             }
             controller.enqueue(
               encoder.encode(`data: ${JSON.stringify(data)}\n\n`),
