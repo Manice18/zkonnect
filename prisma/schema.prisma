@@ -36,6 +36,6 @@ model Events {
   blink         String
   eventDesc     String
   eventBanner   String
-  eventCreator  User     @relation(fields: [creatorId], references: [id])
+  eventCreator  Creator  @relation(fields: [creatorId], references: [id])
   creatorId     String   @db.ObjectId
 }

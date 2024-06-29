@@ -42,7 +42,7 @@ export function QRDialog({
           />
           <div>
             <DialogTitle className="mx-auto -mt-1 pb-3 font-medium text-black dark:text-white">
-              X Followers Proof
+              LinkedIn Followers Proof
             </DialogTitle>
             <DialogDescription className="pb-4 text-xs text-muted-foreground">
               Scan the below qr code in order <br /> to verify.
@@ -61,15 +61,6 @@ export function QRDialog({
             when scanning QR codes for optimal recognition.
           </p>
         </div>
-        <DialogFooter>
-          <Button
-            variant="outline"
-            type="submit"
-            className="font-dmsans mx-auto w-[60%] bg-transparent text-sm font-medium text-black transition-all duration-500 hover:bg-accent-foreground hover:text-zkonnect-white-origin dark:text-white dark:hover:bg-secondary md:text-base"
-          >
-            Confirm
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

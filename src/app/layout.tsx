@@ -36,7 +36,7 @@ export default function RootLayout({
         )}
       >
         <WalletMultiButtonDynamic>
-          <Toaster position="bottom-center" />
+          <Toaster position="bottom-center" richColors />
           {children}
         </WalletMultiButtonDynamic>
       </body>
