@@ -6,7 +6,7 @@ const Logo = ({ classname }: { classname?: string }) => {
   return (
     <div className={cn("flex items-center gap-x-2", classname)}>
       <Image
-        src="/assets/brand-logos/logo.svg"
+        src="/assets/brand-icons/logo.svg"
         height={60}
         width={60}
         alt="zkonnect-logo"

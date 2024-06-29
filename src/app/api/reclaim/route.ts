@@ -17,8 +17,8 @@ export async function GET(req: NextRequest) {
   await reclaimClient.buildProofRequest(PROVIDERS[provider!]);
   reclaimClient.setSignature(
     await reclaimClient.generateSignature(
-      process.env.RECLAIM_SECRET_KEY! //TODO : Update APP_SECRET with your app secret
-    )
+      process.env.RECLAIM_SECRET_KEY!, //TODO : Update APP_SECRET with your app secret
+    ),
   );
   const data = {
     requestUrl: "",
@@ -31,7 +31,10 @@ export async function GET(req: NextRequest) {
       controller = streamController;
       (async () => {
         const encoder = new TextEncoder();
-        const { requestUrl } = await reclaimClient.createVerificationRequest();
+        const { requestUrl, statusUrl } =
+          await reclaimClient.createVerificationRequest();
+        console.log("requrest url: ", requestUrl);
+        console.log("status url: ", statusUrl);
 
         data.requestUrl = requestUrl;
 
@@ -41,10 +44,11 @@ export async function GET(req: NextRequest) {
           onSuccessCallback: async (proofs) => {
             data.verified = await Reclaim.verifySignedProof(proofs[0]);
             if (data.verified) {
+              console.log(data);
               data.jwt = produceJWTSecret({ identifier: proofs[0].identifier });
             }
             controller.enqueue(
-              encoder.encode(`data: ${JSON.stringify(data)}\n\n`)
+              encoder.encode(`data: ${JSON.stringify(data)}\n\n`),
             );
             controller.close();
           },
