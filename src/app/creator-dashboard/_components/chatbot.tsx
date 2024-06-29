@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { SessionsClient } from "@google-cloud/dialogflow-cx";
 
@@ -33,8 +34,8 @@ const Chatbot: React.FC = () => {
       },
     };
     const [response] = await client.detectIntent(request);
-    const botMessages = response.queryResult.responseMessages
-      .map((message: any) => message.text?.text)
+    const botMessages = response
+      .queryResult!.responseMessages!.map((message: any) => message.text?.text)
       .filter(Boolean);
     const botResponse = botMessages.join("\n");
 
