@@ -40,6 +40,13 @@ const Navbar = ({ requireLogin = true }: { requireLogin?: boolean }) => {
       </div>
       <div className="mx-auto flex w-full max-w-[1600px]">
         <div className="flex w-full items-center justify-end gap-x-2 md:ml-auto">
+          <div className="mt-4 flex justify-center">
+            <input
+              type="text"
+              className="h-[40px] w-full rounded-md border border-gray-300 bg-white p-2"
+              placeholder="Search"
+            />
+          </div>
           {requireLogin && <WalletConnectButton />}
           {/* <WalletMultiButton className="!bg-zkonnect-purple-origin !rounded-lg transition-all duration-200 hover:!bg-black" /> */}
           {/* <WalletConnectButton /> */}

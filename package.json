@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/dialogflow-cx": "^4.7.0",
     "@metaplex-foundation/js": "^0.19.4",
     "@metaplex-foundation/mpl-bubblegum": "^0.7.0",
     "@metaplex-foundation/mpl-token-metadata": "^2.11.1",
