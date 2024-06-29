@@ -21,7 +21,7 @@ const Sidebar = () => {
         <div
           className={cn(
             "relative flex items-center space-x-4",
-            pathUrl.includes("verification") && "text-black",
+            pathUrl.includes("verification") && "font-medium text-black",
           )}
         >
           <div className="rounded-md bg-white p-2">
@@ -33,7 +33,9 @@ const Sidebar = () => {
         <div
           className={cn(
             "relative flex w-full items-center space-x-4",
-            pathUrl.includes("verification") ? "text-black" : "text-[#808080]",
+            pathUrl.includes("verification")
+              ? "font-medium text-black"
+              : "text-[#808080]",
           )}
         >
           <div className="rounded-md bg-white p-2">
@@ -45,7 +47,9 @@ const Sidebar = () => {
         <div
           className={cn(
             "relative flex w-full items-center space-x-4",
-            pathUrl.includes("verification") ? "text-black" : "text-[#808080]",
+            pathUrl.includes("verification")
+              ? "font-medium text-black"
+              : "text-[#808080]",
           )}
         >
           <div className="rounded-md bg-white p-2">
