@@ -7,7 +7,6 @@ import { useScrollTop } from "@/hooks/use-scroll-top";
 import { cn } from "@/lib/utils";
 import WalletConnectButton from "@/components/Wallet/wallet-connect-button";
 import Link from "next/link";
-import Logo from "./Logo";
 
 const Navbar = ({
   requireLogin = true,
