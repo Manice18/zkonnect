@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, MoveRight } from "lucide-react";
+import Link from "next/link";
 
 const page = () => {
   return (
@@ -43,10 +44,12 @@ const page = () => {
               className="h-[60px] w-[357px] rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <Button className="space-x-9 self-end px-7 py-5 text-sm">
-            <span>Continue</span>
-            <MoveRight size={20} />
-          </Button>
+          <Link href="/creator-login/verification" className="self-end">
+            <Button className="space-x-9 px-7 py-5 text-sm">
+              <span>Continue</span>
+              <MoveRight size={20} />
+            </Button>
+          </Link>
         </form>
       </div>
     </section>
