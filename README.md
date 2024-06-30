@@ -1,3 +1,4 @@
+![zKonnect](https://github.com/Manice18/zkonnect/assets/94488557/6981b424-41d8-4a82-859c-c3889490ae1e)
 # zKonnect
 
 zKonnect is a blockchain-based application designed to help creators host their events seamlessly in a decentralized environment. Built on the Solana blockchain, zKonnect leverages the power of decentralization to provide a secure, efficient, and user-friendly platform for event management and ticketing.
@@ -8,19 +9,22 @@ zKonnect is a blockchain-based application designed to help creators host their 
 - **Seamless Payments**: Utilize Solana's fast and low-cost transactions for ticket purchases.
 - **In-App Currency**: Use Blinks as an in-app currency for various transactions.
 - **NFT Ticketing**: Provide attendees with unique NFTs as event tickets and memorabilia.
-- **AI Integration** : We aim to provide fastest possible event organization experience to the user with AI chatbot to extract event data from the user's chat to directly create an event
+- **AI Integration** : We aim to provide fastest possible event organization experience to the user with AI chatbot to extract event data from the user's chat to directly create an event.
 - **Creator Tools**: Comprehensive tools for event creation, management, and analytics.
 - **Audience Engagement**: Interactive features to enhance the event experience for attendees.
 
 ## Technology Stack
 
-- Blockchain: Solana
+- Built on Solana
 - In-App Currency: Blinks
 - NFT Standard: Solana NFT standard (Metaplex)
 - Next.js
 - DialogflowCX
 
-## Getting Started
+## What's new with Blinks?
+- [Blockchain links](https://solana.com/docs/advanced/actions#blinks) – or blinks – turn any Solana Action into a shareable, metadata-rich link. Blinks allow Action-aware clients (browser extension wallets, bots) to display additional capabilities for the user. On a website, a blink might immediately trigger a transaction preview in a wallet without going to a decentralized app;
+![Blinks](https://github.com/Manice18/zkonnect/assets/94488557/51382f68-0ec8-47f9-adb3-2c12a2be688a)
+
 
 ### Prerequisites
 
