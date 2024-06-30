@@ -25,6 +25,8 @@ zKonnect is a blockchain-based application designed to help creators host their 
 - [Blockchain links](https://solana.com/docs/advanced/actions#blinks) – or blinks – turn any Solana Action into a shareable, metadata-rich link. Blinks allow Action-aware clients (browser extension wallets, bots) to display additional capabilities for the user. On a website, a blink might immediately trigger a transaction preview in a wallet without going to a decentralized app;
 ![Blinks](https://github.com/Manice18/zkonnect/assets/94488557/51382f68-0ec8-47f9-adb3-2c12a2be688a)
 
+### Figma
+- [Figma Link](https://www.figma.com/proto/pPGLD4TiGBRdhMnILmF93e/zKonnect?node-id=1-629&t=Nbt3tm2QqEiG1WmA-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1
 
 ### Prerequisites
 
