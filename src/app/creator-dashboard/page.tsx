@@ -1,4 +1,6 @@
-import Profile from "./_components/profile";
+// import Profile from "./_components/profile";
+import Events from "./_components/events";
+import DialogflowMessenger from "./_components/DialogflowMessenger";
 
 const Page = () => {
   return (
@@ -7,6 +9,8 @@ const Page = () => {
         Dashboard
       </h1>
       <Profile />
+      <DialogflowMessenger />
+      {/* <Events /> */}
     </div>
   );
 };
