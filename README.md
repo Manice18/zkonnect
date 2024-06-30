@@ -8,6 +8,7 @@ zKonnect is a blockchain-based application designed to help creators host their 
 - **Seamless Payments**: Utilize Solana's fast and low-cost transactions for ticket purchases.
 - **In-App Currency**: Use Blinks as an in-app currency for various transactions.
 - **NFT Ticketing**: Provide attendees with unique NFTs as event tickets and memorabilia.
+- **AI Integration** : We aim to provide fastest possible event organization experience to the user with AI chatbot to extract event data from the user's chat to directly create an event
 - **Creator Tools**: Comprehensive tools for event creation, management, and analytics.
 - **Audience Engagement**: Interactive features to enhance the event experience for attendees.
 
@@ -16,6 +17,8 @@ zKonnect is a blockchain-based application designed to help creators host their 
 - Blockchain: Solana
 - In-App Currency: Blinks
 - NFT Standard: Solana NFT standard (Metaplex)
+- Next.js
+- DialogflowCX
 
 ## Getting Started
 
