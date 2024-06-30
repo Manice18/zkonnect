@@ -1,5 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# zKonnect
 
+zKonnect is a blockchain-based application designed to help creators host their events seamlessly in a decentralized environment. Built on the Solana blockchain, zKonnect leverages the power of decentralization to provide a secure, efficient, and user-friendly platform for event management and ticketing.
+
+## Features
+
+- **Decentralized Event Hosting**: Create and manage events on the Solana blockchain.
+- **Seamless Payments**: Utilize Solana's fast and low-cost transactions for ticket purchases.
+- **In-App Currency**: Use Blinks as an in-app currency for various transactions.
+- **NFT Ticketing**: Provide attendees with unique NFTs as event tickets and memorabilia.
+- **AI Integration** : We aim to provide fastest possible event organization experience to the user with AI chatbot to extract event data from the user's chat to directly create an event
+- **Creator Tools**: Comprehensive tools for event creation, management, and analytics.
+- **Audience Engagement**: Interactive features to enhance the event experience for attendees.
+
+## Technology Stack
+
+- Blockchain: Solana
+- In-App Currency: Blinks
+- NFT Standard: Solana NFT standard (Metaplex)
+- Next.js
+- DialogflowCX
+
+## Getting Started
+
+### Prerequisites
+
+- [Solana CLI Tools](https://docs.solana.com/cli/install-solana-cli-tools)
+- [Node.js](https://nodejs.org/) (version 14 or higher)
+- [Yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/)
+
+### Installation
+
+1. Clone the repository:
 ## Getting Started
 
 First, run the development server:

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/dialogflow": "^6.7.0",
     "@google-cloud/dialogflow-cx": "^4.7.0",
     "@google/generative-ai": "^0.14.0",
     "@huddle01/react": "^2.0.16",

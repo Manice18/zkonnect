@@ -45,7 +45,11 @@ import { clusterApiUrl } from "@solana/web3.js";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const WalletContextProvider = ({ children }) => {
-  const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
+  const endpoint = useMemo(
+    () =>
+      "https://mainnet.helius-rpc.com/?api-key=f1ef8b37-29b4-4b4b-9ca9-0ddf429d4e28",
+    [],
+  );
   const wallets = [
     new AlphaWalletAdapter(),
     new AvanaWalletAdapter(),

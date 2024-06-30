@@ -32,12 +32,6 @@ type TPeerMetadata = {
   displayName: string;
 };
 
-type PostPageProps = {
-  params: {
-    roomId: string;
-  };
-};
-
 export default function Page() {
   const [displayName, setDisplayName] = useState<string>("");
   const videoRef = useRef<HTMLVideoElement>(null);

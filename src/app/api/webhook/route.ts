@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
+  // const keyFileContent = fs.readFileSync('zkonnect-fd41635c9f7f.json', 'utf8');
 
   // Handle the incoming request from Dialogflow CX
   // For example, you can fetch the intent name and parameters from the request
