@@ -72,7 +72,6 @@ export default function Page() {
 
   useEffect(() => {
     const handleWallet = async () => {
-      console.log(params.roomId);
       const token = await handleSignIn(
         params.roomId as string,
         displayName,
@@ -224,7 +223,6 @@ export default function Page() {
                             );
 
                         const data = await status.json();
-                        console.log({ data });
                         setIsRecording(!isRecording);
                       }}
                     >

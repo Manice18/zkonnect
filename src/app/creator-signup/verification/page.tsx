@@ -1,10 +1,17 @@
-import { MoveRight } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import ProvidersComponent from "./_components/provider";
 import Link from "next/link";
 
-const Page = () => {
+import { MoveRight } from "lucide-react";
+
+import { constructMetaData } from "@/lib/metadata";
+import { Button } from "@/components/ui/button";
+import ProvidersComponent from "./_components/provider";
+
+export const metadata = constructMetaData({
+  title: "Creator Verification | zKonnect",
+  description: "This is the creator verification of zKonnect",
+});
+
+const VerificationPage = () => {
   return (
     <section className="flex h-screen flex-col items-center pt-48">
       <div className="flex min-h-[400px] min-w-[800px] flex-col items-center justify-between">
@@ -30,4 +37,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default VerificationPage;

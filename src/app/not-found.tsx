@@ -2,6 +2,12 @@ import Link from "next/link";
 
 import { Spotlight } from "@/components/Common/Spotlight";
 import { Button } from "@/components/ui/button";
+import { constructMetaData } from "@/lib/metadata";
+
+export const metadata = constructMetaData({
+  title: "404 | zKonnect",
+  description: "This is the 404 Page for zKonnect",
+});
 
 const NotFound = () => {
   return (

@@ -4,8 +4,8 @@ import dynamic from "next/dynamic";
 import { Toaster } from "sonner";
 
 import { cn } from "@/lib/utils";
-import "./globals.css";
 import { constructMetaData } from "@/lib/metadata";
+import "./globals.css";
 
 const WalletMultiButtonDynamic = dynamic(
   async () => await import("../contexts/WalletContextProvider"),

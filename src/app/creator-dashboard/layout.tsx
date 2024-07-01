@@ -1,6 +1,6 @@
 import Navbar from "@/app/creator-dashboard/_components/navbar";
 
-const CreatorLoginLayout = ({ children }: { children: React.ReactNode }) => {
+const CreatorSignupLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-full">
       <Navbar />
@@ -9,4 +9,4 @@ const CreatorLoginLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default CreatorLoginLayout;
+export default CreatorSignupLayout;

@@ -14,7 +14,7 @@ export default function Home() {
 
   useEffect(() => {
     if (connected && publicKey) {
-      router.push("/creator-login");
+      router.push("/creator-signup");
     }
   }, [publicKey, connected]);
   return (

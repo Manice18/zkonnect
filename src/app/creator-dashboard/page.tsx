@@ -1,6 +1,12 @@
+import { constructMetaData } from "@/lib/metadata";
 import Events from "./_components/events";
 
-const Page = () => {
+export const metadata = constructMetaData({
+  title: "Creator Dashboad | zKonnect",
+  description: "This is the Creator Dashboad Page of zKonnect",
+});
+
+const CreatorDashboardPage = () => {
   return (
     <div>
       <h1 className="ms-8 mt-24 flex text-2xl font-bold text-black">
@@ -11,4 +17,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default CreatorDashboardPage;

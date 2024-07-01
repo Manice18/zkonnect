@@ -2,12 +2,10 @@ import Image from "next/image";
 
 import QRCode from "react-qr-code";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,

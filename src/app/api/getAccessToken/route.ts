@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { mplBubblegum } from "@metaplex-foundation/mpl-bubblegum";
 import { dasApi } from "@metaplex-foundation/digital-asset-standard-api";
 import { AccessToken, Role } from "@huddle01/server-sdk/auth";
 import { API } from "@huddle01/server-sdk/api";
-import { SigninMessage } from "@/lib/SignInMessage";
 import { PublicKey, clusterApiUrl } from "@solana/web3.js";
+
+import { SigninMessage } from "@/lib/SignInMessage";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();

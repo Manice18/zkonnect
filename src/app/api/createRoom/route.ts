@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { API } from "@huddle01/server-sdk/api";
 
 export async function GET(request: NextRequest) {

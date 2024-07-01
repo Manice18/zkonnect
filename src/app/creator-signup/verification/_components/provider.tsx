@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { Check, Plus, X } from "lucide-react";
 
 import fetchVerificationData from "@/lib/reclaim/reclaim";
-
 import { QRDialog } from "./QRDialog";
 
 type Verified = {

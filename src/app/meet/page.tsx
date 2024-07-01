@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 
-const Page = () => {
+const Meet = () => {
   const [collectionAddress, setCollectionAddress] = useState<string>("");
   const router = useRouter();
 
@@ -39,4 +40,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Meet;

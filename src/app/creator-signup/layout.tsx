@@ -1,7 +1,7 @@
 import Navbar from "@/components/Common/Navbar";
 import Sidebar from "@/components/Common/sidebar";
 
-const CreatorLoginLayout = ({ children }: { children: React.ReactNode }) => {
+const CreatorSignupLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-full">
       <Navbar />
@@ -11,4 +11,4 @@ const CreatorLoginLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default CreatorLoginLayout;
+export default CreatorSignupLayout;
