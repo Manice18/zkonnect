@@ -31,6 +31,10 @@ zKonnect is a blockchain-based application designed to help creators host their 
 
 - [Figma Link](https://www.figma.com/proto/pPGLD4TiGBRdhMnILmF93e/zKonnect?node-id=1-629&t=Nbt3tm2QqEiG1WmA-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1)
 
+### YouTube
+
+- [YouTube](https://youtu.be/qprTSTpP9zQ)
+
 ### Prerequisites
 
 - [Solana CLI Tools](https://docs.solana.com/cli/install-solana-cli-tools)
