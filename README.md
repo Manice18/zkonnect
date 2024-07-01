@@ -1,4 +1,5 @@
 ![zKonnect](https://github.com/Manice18/zkonnect/assets/94488557/6981b424-41d8-4a82-859c-c3889490ae1e)
+
 # zKonnect
 
 zKonnect is a blockchain-based application designed to help creators host their events seamlessly in a decentralized environment. Built on the Solana blockchain, zKonnect leverages the power of decentralization to provide a secure, efficient, and user-friendly platform for event management and ticketing.
@@ -22,11 +23,13 @@ zKonnect is a blockchain-based application designed to help creators host their 
 - DialogflowCX
 
 ## What's new with Blinks?
+
 - [Blockchain links](https://solana.com/docs/advanced/actions#blinks) – or blinks – turn any Solana Action into a shareable, metadata-rich link. Blinks allow Action-aware clients (browser extension wallets, bots) to display additional capabilities for the user. On a website, a blink might immediately trigger a transaction preview in a wallet without going to a decentralized app;
-![Blinks](https://github.com/Manice18/zkonnect/assets/94488557/51382f68-0ec8-47f9-adb3-2c12a2be688a)
+  ![Blinks](https://github.com/Manice18/zkonnect/assets/94488557/51382f68-0ec8-47f9-adb3-2c12a2be688a)
 
 ### Figma
-- [Figma Link](https://www.figma.com/proto/pPGLD4TiGBRdhMnILmF93e/zKonnect?node-id=1-629&t=Nbt3tm2QqEiG1WmA-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1
+
+- [Figma Link](https://www.figma.com/proto/pPGLD4TiGBRdhMnILmF93e/zKonnect?node-id=1-629&t=Nbt3tm2QqEiG1WmA-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1)
 
 ### Prerequisites
 
@@ -36,7 +39,14 @@ zKonnect is a blockchain-based application designed to help creators host their 
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository
+2. Run the command `npm i`.
+3. copy the env variables from .env.example and paste into .env
+4. Go to [Huddle](https://docs.huddle01.com/docs/api-keys) and get you API_KEY and Project Id and paste under NEXT_PUBLIC_PROJECT_ID AND API_KEY.
+5. Go to [Reclaim](https://dev.reclaimprotocol.org/) and create your app by select the linkedin equal provider and paste the keys under RECLAIM_APP_ID and RECLAIM_SECRET_KEY respectively.
+6. Put NEXT_PUBLIC_ENVIRONMENT value as localhost.
+7. Get the DATABASE_URL by creating a db from MongoDB.
+
 ## Getting Started
 
 First, run the development server:
