@@ -48,8 +48,6 @@ const Navbar = ({
         </Link>
         <div className="flex w-full items-center justify-end gap-x-2 md:ml-auto">
           {requireLogin && <WalletConnectButton />}
-          {/* <WalletMultiButton className="!bg-zkonnect-purple-origin !rounded-lg transition-all duration-200 hover:!bg-black" /> */}
-          {/* <WalletConnectButton /> */}
         </div>
       </div>
     </nav>

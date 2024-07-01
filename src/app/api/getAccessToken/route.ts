@@ -5,7 +5,7 @@ import { dasApi } from "@metaplex-foundation/digital-asset-standard-api";
 import { AccessToken, Role } from "@huddle01/server-sdk/auth";
 import { API } from "@huddle01/server-sdk/api";
 import { SigninMessage } from "@/lib/SignInMessage";
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey, clusterApiUrl } from "@solana/web3.js";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     roomDetails?.tokenGatingInfo?.tokenGatingConditions[0]?.contractAddress;
 
   const umi = createUmi(
-    "https://mainnet.helius-rpc.com/?api-key=f1ef8b37-29b4-4b4b-9ca9-0ddf429d4e28",
+    process.env.NEXT_PUBLIC_SOLANA_RPC! || clusterApiUrl("devnet"),
   ).use(mplBubblegum());
   umi.use(dasApi());
   const rpcAssetList = await umi.rpc.getAssetsByOwner({

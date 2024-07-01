@@ -75,12 +75,6 @@
   }
 }
 
-@layer components {
-  .zkonnect-gradient {
-    @apply bg-gradient-to-r from-zkonnect-purple-gradientStart via-zkonnect-purple-gradientVia to-zkonnect-purple-gradientEnd bg-clip-text text-transparent;
-  }
-}
-
 .wallet-adapter-button.wallet-adapter-button-trigger {
   @apply relative z-0 flex h-min w-full cursor-pointer items-center justify-center rounded-md bg-[#F7F7F7] bg-full px-6 py-[9px] text-sm font-normal text-black backdrop-blur-sm backdrop-filter transition-all duration-500 hover:text-white hover:before:opacity-100 dark:outline dark:outline-[0.5px] dark:outline-zkonnect-gray md:text-base;
 }

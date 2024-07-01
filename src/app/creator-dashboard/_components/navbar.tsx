@@ -48,8 +48,6 @@ const Navbar = ({ requireLogin = true }: { requireLogin?: boolean }) => {
             />
           </div>
           {requireLogin && <WalletConnectButton />}
-          {/* <WalletMultiButton className="!bg-zkonnect-purple-origin !rounded-lg transition-all duration-200 hover:!bg-black" /> */}
-          {/* <WalletConnectButton /> */}
         </div>
       </div>
     </nav>

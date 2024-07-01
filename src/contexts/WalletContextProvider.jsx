@@ -46,8 +46,7 @@ require("@solana/wallet-adapter-react-ui/styles.css");
 
 const WalletContextProvider = ({ children }) => {
   const endpoint = useMemo(
-    () =>
-      "https://mainnet.helius-rpc.com/?api-key=f1ef8b37-29b4-4b4b-9ca9-0ddf429d4e28",
+    () => process.env.NEXT_PUBLIC_SOLANA_RPC || clusterApiUrl("devnet"),
     [],
   );
   const wallets = [

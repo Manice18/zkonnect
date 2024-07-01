@@ -46,6 +46,7 @@ zKonnect is a blockchain-based application designed to help creators host their 
 5. Go to [Reclaim](https://dev.reclaimprotocol.org/) and create your app by select the linkedin equal provider and paste the keys under RECLAIM_APP_ID and RECLAIM_SECRET_KEY respectively.
 6. Put NEXT_PUBLIC_ENVIRONMENT value as localhost.
 7. Get the DATABASE_URL by creating a db from MongoDB.
+8. Grab your NEXT_PUBLIC_SOLANA_RPC url from your choice of RPC provider and put the value, or the default solana rpc will be used (I'll suggest get one from [Heilus](https://www.helius.dev/)).
 
 ## Getting Started
 

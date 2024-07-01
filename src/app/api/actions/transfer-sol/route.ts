@@ -97,8 +97,7 @@ export const POST = async (req: Request) => {
     }
 
     const connection = new Connection(
-      process.env.SOLANA_RPC! ||
-        "https://mainnet.helius-rpc.com/?api-key=f1ef8b37-29b4-4b4b-9ca9-0ddf429d4e28",
+      process.env.NEXT_PUBLIC_SOLANA_RPC! || clusterApiUrl("devnet"),
     );
 
     // ensure the receiving account will be rent exempt

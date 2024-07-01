@@ -72,13 +72,6 @@ const config = {
             card: "#FFFCFA",
             origin: "#FFFFFF",
           },
-          purple: {
-            origin: "#7C6BFF",
-            gradientStart: "#AE9CFF",
-            gradientVia: "#926AFF",
-            gradientEnd: "#B2A8FF",
-            hover: "#07071B",
-          },
         },
       },
       borderRadius: {
