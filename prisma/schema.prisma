@@ -33,9 +33,20 @@ model Events {
   ticketPrice   Float
   eventStatus   String
   meetLink      String
-  blink         String
   eventDesc     String
   eventBanner   String
-  eventCreator  Creator  @relation(fields: [creatorId], references: [id])
+  eventCreator  Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   creatorId     String   @db.ObjectId
+  Blink         Blink[]
+}
+
+model Blink {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  eventName     String
+  eventDesc     String
+  blinkIcon     String
+  ticketPrice   Float
+  walletAddress String
+  eventId       String @unique @db.ObjectId
+  event         Events @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }

@@ -13,64 +13,87 @@ import {
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
+import { ObjectId } from "bson";
 
 import { DEFAULT_SOL_ADDRESS, DEFAULT_SOL_AMOUNT } from "./const";
+import { db } from "@/lib/prisma";
 
-export const GET = async (req: Request) => {
-  try {
-    const requestUrl = new URL(req.url);
-    const { toPubkey } = validatedQueryParams(requestUrl);
-
-    const baseHref = new URL(
-      `/api/actions/transfer-sol?to=${toPubkey.toBase58()}`,
-      requestUrl.origin,
-    ).toString();
-
-    const payload: ActionGetResponse = {
-      title: "Actions Example - Transfer Native SOL",
-      icon: new URL("/solana_devs.jpg", requestUrl.origin).toString(),
-      description: "Transfer SOL to another Solana wallet",
-      label: "Transfer", // this value will be ignored since `links.actions` exists
-      links: {
-        actions: [
-          {
-            label: "Send 1 SOL", // button text
-            href: `${baseHref}&amount=${"1"}`,
-          },
-          {
-            label: "Send 5 SOL", // button text
-            href: `${baseHref}&amount=${"5"}`,
-          },
-          {
-            label: "Send 10 SOL", // button text
-            href: `${baseHref}&amount=${"10"}`,
-          },
-          {
-            label: "Send SOL", // button text
-            href: `${baseHref}&amount={amount}`, // this href will have a text input
-            parameters: [
-              {
-                name: "amount", // parameter name in the `href` above
-                label: "Enter the amount of SOL to send", // placeholder of the text input
-                required: true,
-              },
-            ],
-          },
-        ],
-      },
-    };
-
-    return Response.json(payload, {
-      headers: ACTIONS_CORS_HEADERS,
-    });
-  } catch (err) {
-    console.log(err);
-    let message = "An unknown error occurred";
-    if (typeof err == "string") message = err;
-    return new Response(message, {
+export const GET = async (
+  req: Request,
+  { params }: { params: { eventId: string } },
+) => {
+  if (!params.eventId) {
+    return new Response("Invalid eventId", {
       status: 400,
       headers: ACTIONS_CORS_HEADERS,
     });
+  }
+
+  if (!ObjectId.isValid(params.eventId)) {
+    return new Response("Invalid eventId format", {
+      status: 400,
+      headers: ACTIONS_CORS_HEADERS,
+    });
+  }
+
+  const event = await db.blink.findUnique({
+    where: {
+      eventId: params.eventId,
+    },
+  });
+  if (!event) {
+    return new Response("Event not found", {
+      status: 404,
+      headers: ACTIONS_CORS_HEADERS,
+    });
+  } else {
+    try {
+      const requestUrl = new URL(req.url);
+      // const { toPubkey } = validatedQueryParams(requestUrl);
+
+      const baseHref = new URL(
+        `/api/actions/${event.eventId}?to=${event.walletAddress}`,
+        requestUrl.origin,
+      ).toString();
+
+      const payload: ActionGetResponse = {
+        title: event.eventName,
+        icon: event.blinkIcon, // Use the remote URL here
+        description: event.eventDesc,
+        label: "Transfer", // this value will be ignored since `links.actions` exists
+        links: {
+          actions: [
+            {
+              label: `Send ${event.ticketPrice} SOL`, // button text
+              href: `${baseHref}&amount=${event.ticketPrice}`,
+            },
+            {
+              label: "Send SOL", // button text
+              href: `${baseHref}&amount={amount}`, // this href will have a text input
+              parameters: [
+                {
+                  name: "amount", // parameter name in the `href` above
+                  label: "Support my work", // placeholder of the text input
+                  required: true,
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      return Response.json(payload, {
+        headers: ACTIONS_CORS_HEADERS,
+      });
+    } catch (err) {
+      console.log(err);
+      let message = "An unknown error occurred";
+      if (typeof err == "string") message = err;
+      return new Response(message, {
+        status: 400,
+        headers: ACTIONS_CORS_HEADERS,
+      });
+    }
   }
 };
 
