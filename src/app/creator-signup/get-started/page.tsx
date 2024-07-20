@@ -22,7 +22,7 @@ const getStartedPage = () => {
           </h1>
           <p className="text-center text-sm text-muted-foreground">
             We're thrilled to have you here, Let's get started on <br />{" "}
-            creating something amazing! ;)
+            creating something amazing!{" ;)"}
           </p>
           <Image
             src="/assets/get-started_bg.svg"
