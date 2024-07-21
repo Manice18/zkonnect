@@ -6,6 +6,7 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
   AlphaWalletAdapter,
@@ -42,9 +43,12 @@ import {
   XDEFIWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
-require("@solana/wallet-adapter-react-ui/styles.css");
+import "@solana/wallet-adapter-react-ui/styles.css";
 
-const WalletContextProvider = ({ children }) => {
+import type { ComponentProps } from "@/types";
+
+const WalletContextProvider = ({ children }: ComponentProps) => {
+  const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(
     () => process.env.NEXT_PUBLIC_SOLANA_RPC || clusterApiUrl("devnet"),
     [],
@@ -80,7 +84,7 @@ const WalletContextProvider = ({ children }) => {
     new TokenPocketWalletAdapter(),
     new TorusWalletAdapter(),
     new TrustWalletAdapter(),
-    new WalletConnectWalletAdapter(),
+    new WalletConnectWalletAdapter({ network, options: [] }),
     new XDEFIWalletAdapter(),
   ];
 

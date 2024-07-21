@@ -18,12 +18,19 @@ export async function GET(request: NextRequest) {
   });
 
   try {
+    const startTime = new Date("2024-07-20T20:14:00Z");
+    const expiryTime = new Date("2024-07-20T20:16:00Z");
     const createNewRoom = await api.createRoom({
       title: "Token Gated Room",
       tokenType: "SPL",
       chain: "SOLANA",
       contractAddress: [collectionAddress],
+      // startTime: startTime.toISOString(),
+      // expiryTime: expiryTime.toISOString(),
+      // hostWallets: ["2M8bv4tBRrpZHiGJ1s1p1s1KQYJNvfXqnrCc2FcRanHy"],
     });
+
+    console.log(createNewRoom);
 
     if (createNewRoom.error) {
       throw new Error();
