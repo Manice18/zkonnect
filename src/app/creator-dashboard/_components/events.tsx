@@ -19,7 +19,7 @@ const Events = () => {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="upcoming" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-3 space-x-2">
             <TabsTrigger
               value="upcoming"
               className="hover:bg-white hover:text-red-500"
