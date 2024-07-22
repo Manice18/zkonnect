@@ -1,9 +1,9 @@
-import Navbar from "@/app/creator-dashboard/_components/navbar";
+import Navbar from "@/components/Common/Navbar";
 
 const CreatorSignupLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-full">
-      <Navbar />
+      <Navbar requireLogo />
       <main className="h-screen bg-zkonnect-white-origin">{children}</main>
     </div>
   );

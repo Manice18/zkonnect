@@ -1,15 +1,14 @@
 "use client";
 
-import Image from "next/image";
-
 import { usePathname } from "next/navigation";
-
 import Logo from "@/components/Common/Logo";
 import { BadgeCheck, CircleUserRound, Rocket } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Sidebar = () => {
   const pathUrl = usePathname();
+
+  const isGetStarted = pathUrl.includes("get-started");
 
   return (
     <div className="fixed left-0 top-0 flex h-full w-72 flex-col items-center bg-[#F7F7F7]">
@@ -22,6 +21,7 @@ const Sidebar = () => {
           className={cn(
             "relative flex items-center space-x-4",
             pathUrl.includes("verification") && "font-medium text-black",
+            isGetStarted && "text-black",
           )}
         >
           <div className="rounded-md bg-white p-2">
@@ -36,6 +36,7 @@ const Sidebar = () => {
             pathUrl.includes("verification")
               ? "font-medium text-black"
               : "text-[#808080]",
+            isGetStarted && "text-black",
           )}
         >
           <div className="rounded-md bg-white p-2">
@@ -47,9 +48,10 @@ const Sidebar = () => {
         <div
           className={cn(
             "relative flex w-full items-center space-x-4",
-            pathUrl.includes("verification")
+            pathUrl.includes("get-started")
               ? "font-medium text-black"
               : "text-[#808080]",
+            isGetStarted && "text-black",
           )}
         >
           <div className="rounded-md bg-white p-2">

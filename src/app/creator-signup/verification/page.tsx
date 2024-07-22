@@ -26,8 +26,8 @@ const VerificationPage = () => {
           </p>
           <ProvidersComponent />
         </div>
-        <Link href="/dashboard" className="self-end">
-          <Button className="space-x-9 px-7 py-5 text-sm">
+        <Link href="/creator-signup/get-started" className="self-end">
+          <Button className="space-x-9 bg-black px-7 py-5 text-sm">
             <span>Continue</span>
             <MoveRight size={20} />
           </Button>
