@@ -10,6 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@coral-xyz/anchor": "^0.30.1",
     "@hookform/resolvers": "^3.6.0",
     "@huddle01/react": "^2.0.16",
     "@huddle01/server-sdk": "^2.0.6",

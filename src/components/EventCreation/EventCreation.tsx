@@ -38,6 +38,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useZkonnect } from "@/hooks/useZkonnect";
+import { useState } from "react";
 
 type EventCreationFormSchemaType = z.infer<typeof eventCreationFormSchema>;
 
@@ -45,13 +47,17 @@ const EventCreation = () => {
   const { publicKey } = useWallet();
   const router = useRouter();
 
+  const { createTheEvent, payforTicket, closeAccount, getAllCreatorAccounts } =
+    useZkonnect();
+
+  const [allEvents, setAllEvents] = useState<any>([]);
+
   const form = useForm<EventCreationFormSchemaType>({
     resolver: zodResolver(eventCreationFormSchema),
     defaultValues: {
       eventName: "",
       eventDescription: "",
-      eventBanner: "",
-      maxParticipants: 0,
+      bannerUrl: "",
       ticketPrice: 0,
       nativePaymentToken: "USDC",
       eventDate: new Date(),
@@ -64,7 +70,21 @@ const EventCreation = () => {
       return;
     }
 
-    console.log(values);
+    console.log(values.eventDate.getTime());
+
+    await createTheEvent({
+      eventName: values.eventName,
+      eventDescription: values.eventDescription,
+      creatorName: "John Doe",
+      creatorDomain: "singing",
+      bannerUrl: values.bannerUrl,
+      dateTime: values.eventDate.getTime(),
+      location: values.location,
+      ticketPrice: values.ticketPrice,
+      totalTickets: values.totalTickets,
+      tokenType: values.nativePaymentToken,
+      collectionNft: values.collectionNft,
+    });
 
     toast.success("Event creation successful", {
       description: "Go to dashboard to view your event",
@@ -74,7 +94,7 @@ const EventCreation = () => {
         onClick: () => router.push("/creator/dashboard"),
       },
     });
-    form.reset();
+    // form.reset();
   }
 
   return (
@@ -139,7 +159,7 @@ const EventCreation = () => {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
+                        "w-full pl-3 text-left font-normal",
                         !field.value && "text-muted-foreground",
                       )}
                     >
@@ -155,7 +175,7 @@ const EventCreation = () => {
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={field.value ? new Date(field.value) : undefined}
+                    selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date: any) => date < new Date()}
                   />
@@ -170,29 +190,7 @@ const EventCreation = () => {
         />
         <FormField
           control={form.control}
-          name="maxParticipants"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-medium text-black">
-                Max Participants
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Eg. 100"
-                  {...field}
-                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
-                />
-              </FormControl>
-              <FormDescription>
-                The maximum number of participants allowed for the event
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="eventBanner"
+          name="bannerUrl"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-medium text-black">
@@ -207,6 +205,28 @@ const EventCreation = () => {
               </FormControl>
               <FormDescription>
                 A banner image for the event you want to create
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="location"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="font-medium text-black">
+                Event location
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Eg. https://example.com/banner.jpg"
+                  {...field}
+                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
+                />
+              </FormControl>
+              <FormDescription>
+                The location of the event you want to create
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -234,6 +254,52 @@ const EventCreation = () => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="totalTickets"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="font-medium text-black">
+                Total Tickets
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Eg. 100"
+                  {...field}
+                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
+                />
+              </FormControl>
+              <FormDescription>
+                The total number of tickets available for the event you want to
+                create
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="collectionNft"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="font-medium text-black">
+                Collection NFT
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Eg. 8RWXnLH7YoTYWP3oC7BWdgm4ZNYnaLzgF2xAB9Nfq3Jk"
+                  {...field}
+                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
+                />
+              </FormControl>
+              <FormDescription>
+                The address of the NFT collection you want to use for the event
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="nativePaymentToken"
@@ -284,6 +350,29 @@ const EventCreation = () => {
           <span>Create</span>
           <MoveRight size={20} />
         </Button>
+        <label
+          className="cursor-pointer rounded-md bg-black p-2 text-center text-white"
+          onClick={() => {
+            closeAccount("An online event")
+              .then(() => {
+                toast.success("Account closed successfully");
+              })
+              .catch((e) => {
+                toast.error("Error closing account");
+              });
+          }}
+        >
+          Close Account
+        </label>
+        <label
+          className="cursor-pointer rounded-md bg-black p-2 text-center text-white"
+          onClick={async () => {
+            const data = await getAllCreatorAccounts();
+            setAllEvents(data);
+          }}
+        >
+          Get all
+        </label>
       </form>
     </Form>
   );
