@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/Common/Logo";
 import { BadgeCheck, CircleUserRound, Rocket } from "lucide-react";

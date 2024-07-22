@@ -7,8 +7,8 @@ import { constructMetaData } from "@/lib/metadata";
 import { Button } from "@/components/ui/button";
 
 export const metadata = constructMetaData({
-  title: "Creator Verification | zKonnect",
-  description: "This is the creator verification of zKonnect",
+  title: "Creator Get-Started | zKonnect",
+  description: "This is the creator get-started of zKonnect",
 });
 
 const getStartedPage = () => {
@@ -30,8 +30,11 @@ const getStartedPage = () => {
             width={338}
             height={338}
           />
-          <Link href="/dashboard" className="items-center justify-between">
-            <Button className="space-x-9 px-7 py-7 text-sm">
+          <Link
+            href="/creator-dashboard"
+            className="items-center justify-between"
+          >
+            <Button className="space-x-9 bg-black px-7 py-7 text-sm">
               <span>Get Started</span>
               <MoveRight size={30} />
             </Button>
