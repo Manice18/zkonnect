@@ -10,5 +10,5 @@ export type ComponentProps = PropsWithChildren<ExtraTWClassProps>;
 export type CollectionDetails = {
   mint: PublicKey;
   metadata: PublicKey;
-  masterEditionAccount: PublicKey;
+  masterEditionAccount?: PublicKey;
 };
