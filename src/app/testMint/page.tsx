@@ -1,17 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
+import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
 import {
   mintToCollectionV1,
   mintV1,
-  MPL_BUBBLEGUM_PROGRAM_ID,
   mplBubblegum,
+  MPL_BUBBLEGUM_PROGRAM_ID,
 } from "@metaplex-foundation/mpl-bubblegum";
-import Navbar from "@/components/Common/Navbar";
 import {
   createNft,
   MPL_TOKEN_METADATA_PROGRAM_ID,
@@ -21,6 +19,9 @@ import {
   Nft,
   walletAdapterIdentity as waAI,
 } from "@metaplex-foundation/js";
+
+import { Button } from "@/components/ui/button";
+import Navbar from "@/components/Common/Navbar";
 import type { CollectionDetails } from "@/types";
 
 // import {

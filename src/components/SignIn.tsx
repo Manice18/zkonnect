@@ -1,7 +1,8 @@
-import { SigninMessage } from "@/lib/SignInMessage";
 import base58 from "bs58";
 import axios, { isAxiosError } from "axios";
 import { toast } from "sonner";
+
+import { SigninMessage } from "@/lib/SignInMessage";
 
 export const handleSignIn = async (
   roomId: string,

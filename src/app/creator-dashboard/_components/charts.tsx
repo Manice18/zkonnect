@@ -1,6 +1,7 @@
 "use client";
 
 import { Area, AreaChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const chartData = [

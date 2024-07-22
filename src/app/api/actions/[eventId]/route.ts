@@ -15,8 +15,8 @@ import {
 } from "@solana/web3.js";
 import { ObjectId } from "bson";
 
-import { DEFAULT_SOL_ADDRESS, DEFAULT_SOL_AMOUNT } from "./const";
 import { db } from "@/lib/prisma";
+import { DEFAULT_SOL_ADDRESS, DEFAULT_SOL_AMOUNT } from "./const";
 
 export const GET = async (
   req: Request,

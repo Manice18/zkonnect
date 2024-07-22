@@ -1,9 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Logo from "@/components/Common/Logo";
+
 import { BadgeCheck, CircleUserRound, Rocket } from "lucide-react";
+
 import { cn } from "@/lib/utils";
+import Logo from "@/components/Common/Logo";
 
 const Sidebar = () => {
   const pathUrl = usePathname();

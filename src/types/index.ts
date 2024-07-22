@@ -1,5 +1,6 @@
-import { PublicKey } from "@solana/web3.js";
 import type { PropsWithChildren } from "react";
+
+import { PublicKey } from "@solana/web3.js";
 
 export interface ExtraTWClassProps {
   className?: string;

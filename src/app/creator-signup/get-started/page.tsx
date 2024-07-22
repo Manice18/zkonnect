@@ -1,7 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import { MoveRight } from "lucide-react";
-import Image from "next/image";
 
 import { constructMetaData } from "@/lib/metadata";
 import { Button } from "@/components/ui/button";
@@ -18,11 +18,11 @@ const getStartedPage = () => {
         <div className="flex flex-col items-center justify-center space-y-8">
           <h1 className="text-center text-3xl font-bold text-black">
             Welcome, Creator <br />
-            Let's Make Magic Happen! ✨
+            Let&apos;s Make Magic Happen! ✨
           </h1>
           <p className="text-center text-sm text-muted-foreground">
-            We're thrilled to have you here, Let's get started on <br />{" "}
-            creating something amazing!{" ;)"}
+            We&apos;re thrilled to have you here, Let&apos;s get started on{" "}
+            <br /> creating something amazing!{" ;)"}
           </p>
           <Image
             src="/assets/get-started_bg.svg"

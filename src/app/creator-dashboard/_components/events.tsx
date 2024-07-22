@@ -3,14 +3,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// const EventItem = ({ title, desc, startTime }) => (
-//   <div className="mb-3 rounded-md border p-4 hover:bg-gray-100">
-//     <h4 className="mb-1 text-lg font-semibold">{title}</h4>
-//     <p className="text-gray-500">{desc}</p>
-//     <p className="text-sm text-gray-400">{startTime}</p>
-//   </div>
-// );
-
 const Events = () => {
   return (
     <Card className="w-full">
