@@ -128,7 +128,7 @@ const CreatorSignupForm = () => {
           )}
         />
         <Button
-          className="z-10 w-[150px] space-x-3 self-end px-7 py-6 text-sm"
+          className="z-10 w-[150px] space-x-3 self-end bg-black px-7 py-6 text-sm"
           type="submit"
         >
           <span>Continue</span>

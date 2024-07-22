@@ -1,11 +1,11 @@
 "use-client";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
 const CreateEvent = () => {
   return (
     <Card>
-      <h3 className="m-3 text-lg font-semibold">Create Event</h3>
+      <CardTitle className="m-4">Create Event</CardTitle>
       <CardContent className="flex flex-col items-center p-6">
         <Image
           src="/assets/dashboard/ai-icon.svg"

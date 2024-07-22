@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Events = () => {
   return (
-    <Card className="w-full">
+    <Card className="h-full w-full">
       <CardHeader>
         <CardTitle>My Events</CardTitle>
       </CardHeader>
