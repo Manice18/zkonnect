@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 import { toast } from "sonner";
-import { Check, Plus, X } from "lucide-react";
+import { BadgeInfo, Check, Plus, X } from "lucide-react";
 
 import fetchVerificationData from "@/lib/reclaim/reclaim";
 import { QRDialog } from "./QRDialog";
@@ -75,48 +75,58 @@ const ProvidersComponent = () => {
   };
 
   return (
-    <div
-      className="flex h-[75px] cursor-pointer items-center justify-between rounded-lg border px-3 py-3 outline-zkonnect-gray backdrop-blur-sm backdrop-filter sm:px-6"
-      onClick={() =>
-        handleVerification({
-          socialType: "linkedin",
-          imageUrl: "linkedin.svg",
-        })
-      }
-    >
-      <div className="flex items-center space-x-7">
-        <Image
-          src={`/assets/provider/linkedin.svg`}
-          alt="logo"
-          className=""
-          width={48}
-          height={48}
-        />
-        <div>
-          <p className="text-sm font-semibold text-black dark:text-white">
-            LinkedIn Followers
-          </p>
-          <span className="text-xs text-muted-foreground">
-            Number of followers you have in LinkedIn
-          </span>
+    <div>
+      <div
+        className="flex h-[75px] cursor-pointer items-center justify-between rounded-lg border px-3 py-3 outline-zkonnect-gray backdrop-blur-sm backdrop-filter sm:px-6"
+        onClick={() =>
+          handleVerification({
+            socialType: "linkedin",
+            imageUrl: "linkedin.svg",
+          })
+        }
+      >
+        <div className="flex items-center space-x-7">
+          <Image
+            src={`/assets/provider/linkedin.svg`}
+            alt="logo"
+            className=""
+            width={48}
+            height={48}
+          />
+          <div>
+            <p className="text-sm font-semibold text-black dark:text-white">
+              LinkedIn Followers
+            </p>
+            <span className="text-xs text-muted-foreground">
+              Number of followers you have in LinkedIn
+            </span>
+          </div>
         </div>
+        {verfied.states === "unverified" ? (
+          <Plus className="ml-28" size={18} />
+        ) : verfied.states === "verified" ? (
+          <Check className="ml-28 text-green-500" size={18} />
+        ) : (
+          <X className="ml-28 text-red-500" size={18} />
+        )}
+        {isOpen && (
+          <QRDialog
+            requestUrl={requestUrl}
+            providerName={providerName}
+            isOpen={isOpen}
+            providerImage={providerImageUrl}
+            setIsOpen={closeDialog}
+          />
+        )}
       </div>
-      {verfied.states === "unverified" ? (
-        <Plus className="ml-28" size={18} />
-      ) : verfied.states === "verified" ? (
-        <Check className="ml-28 text-green-500" size={18} />
-      ) : (
-        <X className="ml-28 text-red-500" size={18} />
-      )}
-
-      {isOpen && (
-        <QRDialog
-          requestUrl={requestUrl}
-          providerName={providerName}
-          isOpen={isOpen}
-          providerImage={providerImageUrl}
-          setIsOpen={closeDialog}
-        />
+      <p className="my-8 flex items-center justify-center space-x-2 text-xs text-destructive">
+        <BadgeInfo size={18} />{" "}
+        <span>You are not eligible as you do not have 10K+ followers.</span>
+      </p>
+      {verfied.states === "ineligible" && (
+        <p className="my-8">
+          <BadgeInfo /> You are not eligible as you do not have 10K+ followers.
+        </p>
       )}
     </div>
   );

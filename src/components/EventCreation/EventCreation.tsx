@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { toast } from "sonner";
 import { MoveRight, Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -40,6 +40,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useZkonnect } from "@/hooks/useZkonnect";
 import { useState } from "react";
+import { ConfirmEvent } from "./confirmEvent";
 
 type EventCreationFormSchemaType = z.infer<typeof eventCreationFormSchema>;
 
@@ -57,12 +58,17 @@ const EventCreation = () => {
     defaultValues: {
       eventName: "",
       eventDescription: "",
-      bannerUrl: "",
-      ticketPrice: 0,
-      nativePaymentToken: "USDC",
       eventDate: new Date(),
+      bannerUrl: "",
+      location: "",
+      ticketPrice: 0,
+      totalTickets: 1,
+      collectionNft: "",
+      nativePaymentToken: "USDC",
     },
   });
+
+  const { isValid } = useFormState({ control: form.control });
 
   async function onSubmit(values: z.infer<typeof eventCreationFormSchema>) {
     if (!publicKey) {
@@ -70,21 +76,21 @@ const EventCreation = () => {
       return;
     }
 
-    console.log(values.eventDate.getTime());
+    console.log(values);
 
-    await createTheEvent({
-      eventName: values.eventName,
-      eventDescription: values.eventDescription,
-      creatorName: "John Doe",
-      creatorDomain: "singing",
-      bannerUrl: values.bannerUrl,
-      dateTime: values.eventDate.getTime(),
-      location: values.location,
-      ticketPrice: values.ticketPrice,
-      totalTickets: values.totalTickets,
-      tokenType: values.nativePaymentToken,
-      collectionNft: values.collectionNft,
-    });
+    // await createTheEvent({
+    //   eventName: values.eventName,
+    //   eventDescription: values.eventDescription,
+    //   creatorName: "John Doe",
+    //   creatorDomain: "singing",
+    //   bannerUrl: values.bannerUrl,
+    //   dateTime: values.eventDate.getTime(),
+    //   location: values.location,
+    //   ticketPrice: values.ticketPrice,
+    //   totalTickets: values.totalTickets,
+    //   tokenType: values.nativePaymentToken,
+    //   collectionNft: values.collectionNft,
+    // });
 
     toast.success("Event creation successful", {
       description: "Go to dashboard to view your event",
@@ -344,13 +350,17 @@ const EventCreation = () => {
             </FormItem>
           )}
         />
-        <Button
-          className="z-10 w-[150px] space-x-3 self-end px-7 py-6 text-sm"
-          type="submit"
-        >
-          <span>Create</span>
-          <MoveRight size={20} />
-        </Button>
+        <ConfirmEvent
+          disabled={!isValid}
+          onConfirm={form.handleSubmit(onSubmit)}
+          eventName={form.getValues().eventName}
+          eventDescription={form.getValues().eventDescription}
+          bannerUrl={form.getValues().bannerUrl}
+          dateTime={form.getValues().eventDate.toLocaleDateString()}
+          ticketPrice={form.getValues().ticketPrice}
+          totalTickets={form.getValues().totalTickets}
+          tokenType={form.getValues().nativePaymentToken}
+        />
         <label
           className="cursor-pointer rounded-md bg-black p-2 text-center text-white"
           onClick={() => {
