@@ -1,4 +1,7 @@
 import { constructMetaData } from "@/lib/metadata";
+import Link from "next/link";
+import { MoveRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Events from "./_components/events";
 import Charts from "./_components/charts";
 import Profile from "./_components/profile";
@@ -12,9 +15,15 @@ export const metadata = constructMetaData({
 const CreatorDashboardPage = () => {
   return (
     <div className="p-6">
-      <h1 className="mb-6 ms-8 mt-24 flex text-2xl font-bold text-black">
-        Dashboard
-      </h1>
+      <div className="mb-6 mt-24 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-black">Dashboard</h1>
+        <Link href="/create-event">
+          <Button className="space-x-6 bg-black px-5 py-5 text-sm">
+            <span>Create event</span>
+            <MoveRight size={20} />
+          </Button>
+        </Link>
+      </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

@@ -152,7 +152,7 @@ const EventCreation = () => {
           name="eventDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
+              <FormLabel>Date of Event</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -178,11 +178,12 @@ const EventCreation = () => {
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date: any) => date < new Date()}
+                    className="rounded-md border shadow"
                   />
                 </PopoverContent>
               </Popover>
               <FormDescription>
-                Your date of birth is used to calculate your age.
+                The Date on which you want to host the event.
               </FormDescription>
               <FormMessage />
             </FormItem>

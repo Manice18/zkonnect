@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Events = () => {
   return (
-    <Card className="w-full">
+    <Card className="h-full w-full">
       <CardHeader>
         <CardTitle>My Events</CardTitle>
       </CardHeader>
@@ -58,7 +58,7 @@ const Events = () => {
             value="past"
             className="mb-3 rounded-md border p-4 hover:bg-gray-100"
           >
-            <h4 className="mb-1 text-lg font-semibold">Event1</h4>
+            <h4 className="mb-1 text-lg font-semibold">Event2</h4>
             <p className="text-gray-500">Desc</p>
             <p className="text-sm text-gray-400">Starts in 16h 32min</p>
           </TabsContent>
@@ -66,7 +66,7 @@ const Events = () => {
             value="drafts"
             className="mb-3 rounded-md border p-4 hover:bg-gray-100"
           >
-            <h4 className="mb-1 text-lg font-semibold">Event1</h4>
+            <h4 className="mb-1 text-lg font-semibold">Event3</h4>
             <p className="text-gray-500">Desc</p>
             <p className="text-sm text-gray-400">Starts in 16h 32min</p>
           </TabsContent>
