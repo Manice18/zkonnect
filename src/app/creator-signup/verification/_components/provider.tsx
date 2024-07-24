@@ -54,6 +54,9 @@ const ProvidersComponent = () => {
             setVerified({ states: "verified" });
           } else {
             setVerified({ states: "ineligible" });
+            toast.error(
+              "You are not eligible as you do not have 10K+ followers.",
+            );
           }
         })
         .catch(() => {
