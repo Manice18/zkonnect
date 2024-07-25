@@ -109,48 +109,12 @@ const Page = () => {
     const data = (await createTreeIx)
       .sendAndConfirm(umi)
       .then(async (res) => {
-        // await mintV1(umi, {
-        //   leafOwner: new PublicKey(wallet.publicKey!) as any as UmiPublicKey,
-        //   merkleTree: new PublicKey(merkleTree.publicKey!) as any as UmiPublicKey,
-        //   compressionProgram: publicKey(SPL_ACCOUNT_COMPRESSION_PROGRAM_ID),
-        //   metadata: {
-        //     name: "My Compressed NFT",
-        //     uri: "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/20_138_246/20_138_246.json",
-        //     sellerFeeBasisPoints: 500, // 5%
-        //     collection: none(),
-        //     creators: [
-        //       { address: umi.identity.publicKey, verified: false, share: 100 },
-        //     ],
-        //   },
-        // }).sendAndConfirm(umi);
         const [bubblegumSigner] = PublicKey.findProgramAddressSync(
           [Buffer.from("collection_cpi", "utf8")],
           new PublicKey(MPL_BUBBLEGUM_PROGRAM_ID),
         );
         const collectionNft = await getOrCreateCollectionNFT(connection);
         const mintInstructions = [];
-        // const transactionBuilder = new TransactionBuilder();
-        // const collectionNft = await metaplex.nfts().create({
-        //     uri: "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/20_138_246/20_138_246.json",
-        //     name: "My Compressed NFTI",
-        //     sellerFeeBasisPoints: 0,
-        //     updateAuthority: waAI(wa),
-        //     mintAuthority: umi,
-        //     tokenStandard: 0,
-        //     symbol: "Collection",
-        //     isMutable: true,
-        //     isCollection: true,
-        //   });
-        // await createNft(umi, {
-        //   mint: collectionMint,
-        //   name: "My Compressed NFT",
-        //   authority: umi.payer,
-        //   symbol: "NFTI",
-        //   uri: "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/20_138_246/20_138_246.json",
-        //   sellerFeeBasisPoints: percentAmount(5.5), // 5.5%
-        //   isCollection: true,
-        //   splAtaProgram: new PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL") as any as UmiPublicKey,
-        // }).sendAndConfirm(umi);
         for (let i = 0; i < 3; i++) {
           const mintIx = mintToCollectionV1(umi, {
             leafOwner: new PublicKey(wallet.publicKey!) as any as UmiPublicKey,

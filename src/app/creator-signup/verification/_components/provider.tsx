@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
-import { BadgeInfo, Check, Plus, X } from "lucide-react";
+import { BadgeInfo, Check, MoveRight, Plus, X } from "lucide-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 import fetchVerificationData from "@/lib/reclaim/reclaim";
+import { Button } from "@/components/ui/button";
+import { updateCreatorFollowers } from "@/actions";
 import { QRDialog } from "./QRDialog";
 
 type Verified = {
@@ -20,6 +24,9 @@ type ResponseData = {
 };
 
 const ProvidersComponent = () => {
+  const { publicKey, connected } = useWallet();
+  const router = useRouter();
+
   const [requestUrl, setRequestUrl] = useState<string>();
   const [verfied, setVerified] = useState<Verified>({ states: "unverified" });
   const [providerName, setProviderName] = useState<string>("");
@@ -38,6 +45,10 @@ const ProvidersComponent = () => {
       setIsOpen(true);
       setProviderName(socialType);
       setProviderImageUrl(imageUrl);
+      if (!publicKey || !connected) {
+        toast.error("Please connect your wallet first");
+        return;
+      }
       await fetchVerificationData(
         setRequestUrl,
         socialType,
@@ -52,6 +63,31 @@ const ProvidersComponent = () => {
           const followers = data as ResponseData;
           if (parseInt(followers.followers.replace(/,/g, ""), 10) > 1000) {
             setVerified({ states: "verified" });
+            try {
+              let promise: any;
+              promise = new Promise<void>((resolve, reject) => {
+                updateCreatorFollowers(
+                  publicKey.toBase58(),
+                  parseInt(followers.followers.replace(/,/g, ""), 10),
+                  true,
+                )
+                  .then(() => {
+                    resolve();
+                    router.push("/creator-signup/get-started");
+                  })
+                  .catch((error) => {
+                    reject(error);
+                  });
+              });
+
+              toast.promise(promise, {
+                loading: "Verifying...",
+                success: "You are now successfully verified",
+                error: "Error creating profile. Please try again.",
+              });
+            } catch (error) {
+              console.error("Error creating profile", error);
+            }
           } else {
             setVerified({ states: "ineligible" });
             toast.error(
@@ -75,7 +111,7 @@ const ProvidersComponent = () => {
   };
 
   return (
-    <div>
+    <div className="flex h-full w-full flex-col">
       <div
         className="flex h-[75px] cursor-pointer items-center justify-between rounded-lg border px-3 py-3 outline-zkonnect-gray backdrop-blur-sm backdrop-filter sm:px-6"
         onClick={() =>
@@ -119,15 +155,22 @@ const ProvidersComponent = () => {
           />
         )}
       </div>
-      <p className="my-8 flex items-center justify-center space-x-2 text-xs text-destructive">
-        <BadgeInfo size={18} />{" "}
-        <span>You are not eligible as you do not have 10K+ followers.</span>
-      </p>
       {verfied.states === "ineligible" && (
-        <p className="my-8">
-          <BadgeInfo /> You are not eligible as you do not have 10K+ followers.
+        <p className="my-8 flex items-center justify-center space-x-2 text-xs text-destructive">
+          <BadgeInfo size={18} />{" "}
+          <span>You are not eligible as you do not have 10K+ followers.</span>
         </p>
       )}
+      <Button
+        className="absolute bottom-0 right-0 space-x-3 bg-black px-7 py-6 text-sm"
+        onClick={() => {
+          router.push("/creator-signup/get-started");
+        }}
+        disabled={verfied.states === "verified" ? false : true}
+      >
+        <span>Continue</span>
+        <MoveRight size={20} />
+      </Button>
     </div>
   );
 };

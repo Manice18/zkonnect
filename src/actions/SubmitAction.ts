@@ -18,3 +18,20 @@ export async function createCreatorAction(
   });
   return 1;
 }
+
+export async function updateCreatorFollowers(
+  walletAddress: string,
+  noOfFollowers: number,
+  isVerified: boolean,
+) {
+  await db.creator.update({
+    where: {
+      walletAddress,
+    },
+    data: {
+      noOfFollowers,
+      isVerified,
+    },
+  });
+  return;
+}

@@ -69,9 +69,7 @@ export function ConfirmEvent({
             </div>
           </div>
           <Image
-            src={
-              "https://res.cloudinary.com/dftafieg2/image/upload/v1719948757/jhja6gw8ivmgnf9aggif.png"
-            }
+            src={bannerUrl}
             width={208}
             height={208}
             alt="event banner"

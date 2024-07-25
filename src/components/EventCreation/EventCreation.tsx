@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm, useFormState } from "react-hook-form";
 import { toast } from "sonner";
-import { MoveRight, Calendar as CalendarIcon } from "lucide-react";
+import {
+  MoveRight,
+  Calendar as CalendarIcon,
+  Upload,
+  CircleUserRound,
+} from "lucide-react";
 import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PublicKey } from "@solana/web3.js";
@@ -41,6 +46,8 @@ import { Button } from "@/components/ui/button";
 import { useZkonnect } from "@/hooks/useZkonnect";
 import { useState } from "react";
 import { ConfirmEvent } from "./confirmEvent";
+import Image from "next/image";
+import UploadDropzone from "../Common/UploadDropzone";
 
 type EventCreationFormSchemaType = z.infer<typeof eventCreationFormSchema>;
 
@@ -52,6 +59,8 @@ const EventCreation = () => {
     useZkonnect();
 
   const [allEvents, setAllEvents] = useState<any>([]);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImageName, setSelectedImageName] = useState<string>("");
 
   const form = useForm<EventCreationFormSchemaType>({
     resolver: zodResolver(eventCreationFormSchema),
@@ -59,7 +68,7 @@ const EventCreation = () => {
       eventName: "",
       eventDescription: "",
       eventDate: new Date(),
-      bannerUrl: "",
+      bannerUrl: undefined,
       location: "",
       ticketPrice: 0,
       totalTickets: 1,
@@ -76,7 +85,47 @@ const EventCreation = () => {
       return;
     }
 
-    console.log(values);
+    try {
+      let promise: Promise<void>;
+      promise = new Promise<void>((resolve, reject) => {
+        const formData = new FormData();
+        formData.append("file", values.bannerUrl[0]);
+        fetch("/api/uploadImage", {
+          method: "POST",
+          body: formData,
+        })
+          .then(async (response) => {
+            const uploadedImage = await response.json();
+            console.log(uploadedImage);
+            // await createTheEvent({
+            //   eventName: values.eventName,
+            //   eventDescription: values.eventDescription,
+            //   creatorName: "John Doe",
+            //   creatorDomain: "singing",
+            //   bannerUrl: uploadedImage.userLogo,
+            //   dateTime: values.eventDate.getTime(),
+            //   location: values.location,
+            //   ticketPrice: values.ticketPrice,
+            //   totalTickets: values.totalTickets,
+            //   tokenType: values.nativePaymentToken,
+            //   collectionNft: values.collectionNft,
+            // });
+            console.log(values);
+          })
+          .then(() => {
+            resolve();
+          })
+          .catch((error) => reject(error));
+      });
+
+      toast.promise(promise, {
+        loading: "Your event is being created",
+        success: "Event created successfully!",
+        error: "Error creating event",
+      });
+    } catch (error) {
+      console.error("Error uploading images:", error);
+    }
 
     // await createTheEvent({
     //   eventName: values.eventName,
@@ -92,14 +141,14 @@ const EventCreation = () => {
     //   collectionNft: values.collectionNft,
     // });
 
-    toast.success("Event creation successful", {
-      description: "Go to dashboard to view your event",
-      position: "bottom-center",
-      action: {
-        label: "dashboard",
-        onClick: () => router.push("/creator/dashboard"),
-      },
-    });
+    // toast.success("Event creation successful", {
+    //   description: "Go to dashboard to view your event",
+    //   position: "bottom-center",
+    //   action: {
+    //     label: "dashboard",
+    //     onClick: () => router.push("/creator/dashboard"),
+    //   },
+    // });
     // form.reset();
   }
 
@@ -155,6 +204,24 @@ const EventCreation = () => {
         />
         <FormField
           control={form.control}
+          name="bannerUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="font-medium text-black">
+                Event Banner
+              </FormLabel>
+              <FormControl>
+                <UploadDropzone baseImage={true} onChange={field.onChange} />
+              </FormControl>
+              <FormDescription>
+                A banner image for the event you want to create
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="eventDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
@@ -190,28 +257,6 @@ const EventCreation = () => {
               </Popover>
               <FormDescription>
                 The Date on which you want to host the event.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="bannerUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-medium text-black">
-                Event Banner
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Eg. https://example.com/banner.jpg"
-                  {...field}
-                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
-                />
-              </FormControl>
-              <FormDescription>
-                A banner image for the event you want to create
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -323,10 +368,7 @@ const EventCreation = () => {
                   <SelectItem value="USDC">
                     <div className="flex items-center space-x-2">
                       <Avatar className="size-7">
-                        <AvatarImage
-                          src="https://coin-images.coingecko.com/coins/images/6319/large/usdc.png?1696506694"
-                          //   className="size-7 rounded-full"
-                        />
+                        <AvatarImage src="https://coin-images.coingecko.com/coins/images/6319/large/usdc.png?1696506694" />
                         <AvatarFallback>USDC</AvatarFallback>
                       </Avatar>
                       <span>USDC</span>
