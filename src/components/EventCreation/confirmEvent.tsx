@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -93,7 +94,6 @@ export function ConfirmEvent({
             >
               Cancel
             </Button>
-
             <ConfirmPreview onConfirm={handleConfirm} bannerUrl={bannerUrl} />
           </div>
         </DialogFooter>

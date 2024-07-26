@@ -2,6 +2,30 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+
+const EventItem = ({
+  title,
+  desc,
+  startTime,
+  id,
+}: {
+  title: string;
+  desc: string;
+  startTime: string;
+  id: string;
+}) => {
+  return (
+    <Link
+      href={`/creator-dashboard/event/${id}`}
+      className="mb-3 block rounded-md border p-4 hover:bg-gray-100"
+    >
+      <h4 className="mb-1 text-lg font-semibold">{title}</h4>
+      <p className="text-gray-500">{desc}</p>
+      <p className="text-sm text-gray-400">{startTime}</p>
+    </Link>
+  );
+};
 
 const Events = () => {
   return (
@@ -31,44 +55,24 @@ const Events = () => {
               Drafts
             </TabsTrigger>
           </TabsList>
-          <TabsContent
-            value="upcoming"
-            className="mb-3 rounded-md border p-4 hover:bg-gray-100"
-          >
-            {/* <EventItem
-              title="Event1"
-              desc="Desc"
-              startTime="Starts in 16h 32min"
-            /> */}
-            <h4 className="mb-1 text-lg font-semibold">Event1</h4>
-            <p className="text-gray-500">Desc</p>
-            <p className="text-sm text-gray-400">Starts in 16h 32min</p>
-            {/* <EventItem
+          <TabsContent value="upcoming">
+            <EventItem
+              id="1"
               title="Event1"
               desc="Desc"
               startTime="Starts in 16h 32min"
             />
+          </TabsContent>
+          <TabsContent value="past">
             <EventItem
-              title="Event1"
+              id="2"
+              title="Event2"
               desc="Desc"
-              startTime="Starts in 16h 32min"
-            /> */}
+              startTime="Ended 2 days ago"
+            />
           </TabsContent>
-          <TabsContent
-            value="past"
-            className="mb-3 rounded-md border p-4 hover:bg-gray-100"
-          >
-            <h4 className="mb-1 text-lg font-semibold">Event2</h4>
-            <p className="text-gray-500">Desc</p>
-            <p className="text-sm text-gray-400">Starts in 16h 32min</p>
-          </TabsContent>
-          <TabsContent
-            value="drafts"
-            className="mb-3 rounded-md border p-4 hover:bg-gray-100"
-          >
-            <h4 className="mb-1 text-lg font-semibold">Event3</h4>
-            <p className="text-gray-500">Desc</p>
-            <p className="text-sm text-gray-400">Starts in 16h 32min</p>
+          <TabsContent value="drafts">
+            <EventItem id="3" title="Event3" desc="Desc" startTime="Draft" />
           </TabsContent>
         </Tabs>
       </CardContent>
