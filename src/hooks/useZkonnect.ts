@@ -25,7 +25,6 @@ import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-ad
 import idl from "@/lib/solana/idl.json";
 import { Zkonnect } from "@/types/anchor_zkonnect";
 import useAnchorProvider from "./useAnchorProvider";
-import { createMerkleTree } from "@/lib/functions";
 
 export const useZkonnect = () => {
   const wallet = useWallet();
@@ -117,8 +116,6 @@ export const useZkonnect = () => {
       new BN(10).pow(new BN(mintInfo.decimals)),
     );
 
-    const merkleTreePubKey = await createMerkleTree(totalTickets, umi);
-
     try {
       return program.methods
         .createEvent(
@@ -138,7 +135,7 @@ export const useZkonnect = () => {
           collectionNft: new PublicKey(collectionNft),
           mint: usdcMintAddr,
           tokenProgram: tokenProgram,
-          merkleTree: merkleTreePubKey,
+          merkleTree: merkleTreeAddr,
         })
         .rpc();
     } catch (e) {
