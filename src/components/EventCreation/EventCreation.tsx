@@ -13,8 +13,21 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PublicKey } from "@solana/web3.js";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
+import {
+  mintToCollectionV1,
+  mintV1,
+  mplBubblegum,
+  MPL_BUBBLEGUM_PROGRAM_ID,
+} from "@metaplex-foundation/mpl-bubblegum";
+import {
+  Metaplex,
+  Nft,
+  walletAdapterIdentity as waAI,
+} from "@metaplex-foundation/js";
+import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 
 import { cn } from "@/lib/utils";
 import { eventCreationFormSchema } from "@/lib/validation";
@@ -48,19 +61,30 @@ import { useState } from "react";
 import { ConfirmEvent } from "./confirmEvent";
 import Image from "next/image";
 import UploadDropzone from "../Common/UploadDropzone";
+import { createMerkleTree } from "@/lib/functions";
+import { getCreatorDataAction } from "@/actions";
 
 type EventCreationFormSchemaType = z.infer<typeof eventCreationFormSchema>;
 
 const EventCreation = () => {
-  const { publicKey } = useWallet();
   const router = useRouter();
+  const wallet = useWallet();
+  const connection = new Connection(
+    process.env.NEXT_PUBLIC_SOLANA_RPC! || clusterApiUrl("devnet"),
+    "confirmed",
+  );
+  const umi = createUmi(connection).use(mplBubblegum());
+  umi.use(walletAdapterIdentity(wallet));
+
+  const metaplex = new Metaplex(connection);
+  metaplex.use(waAI(wallet));
 
   const { createTheEvent, payforTicket, closeAccount, getAllCreatorAccounts } =
     useZkonnect();
 
   const [allEvents, setAllEvents] = useState<any>([]);
+  const [cid, setCid] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [selectedImageName, setSelectedImageName] = useState<string>("");
 
   const form = useForm<EventCreationFormSchemaType>({
     resolver: zodResolver(eventCreationFormSchema),
@@ -72,7 +96,6 @@ const EventCreation = () => {
       location: "",
       ticketPrice: 0,
       totalTickets: 1,
-      collectionNft: "",
       nativePaymentToken: "USDC",
     },
   });
@@ -80,7 +103,7 @@ const EventCreation = () => {
   const { isValid } = useFormState({ control: form.control });
 
   async function onSubmit(values: z.infer<typeof eventCreationFormSchema>) {
-    if (!publicKey) {
+    if (!wallet.publicKey) {
       toast.error("Wallet not connected");
       return;
     }
@@ -89,28 +112,55 @@ const EventCreation = () => {
       let promise: Promise<void>;
       promise = new Promise<void>((resolve, reject) => {
         const formData = new FormData();
-        formData.append("file", values.bannerUrl[0]);
-        fetch("/api/uploadImage", {
+        // formData.append("file", values.bannerUrl[0]);
+        formData.set("file", values.bannerUrl[0]);
+        fetch("/api/ipfsUpload", {
           method: "POST",
           body: formData,
         })
           .then(async (response) => {
             const uploadedImage = await response.json();
             console.log(uploadedImage);
-            // await createTheEvent({
-            //   eventName: values.eventName,
-            //   eventDescription: values.eventDescription,
-            //   creatorName: "John Doe",
-            //   creatorDomain: "singing",
-            //   bannerUrl: uploadedImage.userLogo,
-            //   dateTime: values.eventDate.getTime(),
-            //   location: values.location,
-            //   ticketPrice: values.ticketPrice,
-            //   totalTickets: values.totalTickets,
-            //   tokenType: values.nativePaymentToken,
-            //   collectionNft: values.collectionNft,
-            // });
-            console.log(values);
+            setCid(uploadedImage.IpfsHash);
+            const bannerUrl = `https://${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`;
+            console.log(bannerUrl);
+            await createMerkleTree(values.totalTickets, umi).then(
+              async (merkleTreeAddr) => {
+                const { creatorDomain, creatorName } =
+                  await getCreatorDataAction(wallet.publicKey!.toString());
+
+                const response = await fetch(
+                  `/api/createCollectionNft/?eventName=${values.eventName}&creatorAddress=${wallet.publicKey!.toString()}`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      creatorAddress: wallet.publicKey!.toString(),
+                      eventName: values.eventName,
+                    }),
+                  },
+                );
+                const collectionNftAddr = await response.json();
+
+                await createTheEvent({
+                  eventName: values.eventName,
+                  eventDescription: values.eventDescription,
+                  creatorName: creatorName!,
+                  creatorDomain: creatorDomain!,
+                  bannerUrl: bannerUrl,
+                  dateTime: values.eventDate.getTime(),
+                  location: values.location,
+                  ticketPrice: values.ticketPrice,
+                  totalTickets: values.totalTickets,
+                  tokenType: values.nativePaymentToken,
+                  collectionNft: collectionNftAddr.mint,
+                  merkleTreeAddr: new PublicKey(merkleTreeAddr),
+                });
+                console.log(values);
+              },
+            );
           })
           .then(() => {
             resolve();
@@ -211,7 +261,11 @@ const EventCreation = () => {
                 Event Banner
               </FormLabel>
               <FormControl>
-                <UploadDropzone baseImage={true} onChange={field.onChange} />
+                <UploadDropzone
+                  baseImage={true}
+                  onChange={field.onChange}
+                  setSelectedImage={setSelectedImage}
+                />
               </FormControl>
               <FormDescription>
                 A banner image for the event you want to create
@@ -329,28 +383,6 @@ const EventCreation = () => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="collectionNft"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-medium text-black">
-                Collection NFT
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Eg. 8RWXnLH7YoTYWP3oC7BWdgm4ZNYnaLzgF2xAB9Nfq3Jk"
-                  {...field}
-                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
-                />
-              </FormControl>
-              <FormDescription>
-                The address of the NFT collection you want to use for the event
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         <FormField
           control={form.control}
@@ -402,6 +434,9 @@ const EventCreation = () => {
           ticketPrice={form.getValues().ticketPrice}
           totalTickets={form.getValues().totalTickets}
           tokenType={form.getValues().nativePaymentToken}
+          selectedImage={
+            selectedImage !== null ? URL.createObjectURL(selectedImage) : ""
+          }
         />
         <label
           className="cursor-pointer rounded-md bg-black p-2 text-center text-white"

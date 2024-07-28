@@ -1,5 +1,5 @@
 {
-  "address": "LF3zzGufxyKgfVWtMmDiK7B7j4kaxmaGy8dU6mnyPNM",
+  "address": "Cse1J9Q4QkfCtjTN9629PgCbTzfug4xfSoKExL83aANh",
   "metadata": {
     "name": "zkonnect",
     "version": "0.1.0",
@@ -33,6 +33,10 @@
         },
         {
           "name": "mint"
+        },
+        {
+          "name": "merkle_tree",
+          "writable": true
         },
         {
           "name": "collection_nft",
@@ -310,6 +314,10 @@
           },
           {
             "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "merkle_tree",
             "type": "pubkey"
           },
           {

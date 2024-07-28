@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 
 import { Cloud, File as File2 } from "lucide-react";
 import Dropzone from "react-dropzone";
@@ -9,9 +9,11 @@ import { Progress } from "@/components/ui/progress";
 const UploadDropzone = ({
   baseImage = false,
   onChange,
+  setSelectedImage,
 }: {
   baseImage: boolean;
   onChange: (webFiles: any) => void;
+  setSelectedImage: (file: File) => void;
 }) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -73,6 +75,7 @@ const UploadDropzone = ({
         const webpFiles = await Promise.all(
           acceptedFile.map(async (file) => {
             const webpFile = await convertToWebP(file);
+            setSelectedImage(file);
             return webpFile;
           }),
         );

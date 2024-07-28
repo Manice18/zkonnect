@@ -46,6 +46,7 @@ import {
   Signer,
   TransactionBuilder,
   transactionBuilder,
+  keypairIdentity,
 } from "@metaplex-foundation/umi";
 
 const Page = () => {
@@ -58,8 +59,48 @@ const Page = () => {
   const umi = createUmi(connection).use(mplBubblegum());
   umi.use(walletAdapterIdentity(wallet));
 
+  const newUmi = createUmi(connection).use(mplBubblegum());
+  const myPrivateKey = Uint8Array.from([
+    18, 127, 152, 242, 81, 58, 14, 97, 54, 82, 28, 4, 105, 231, 85, 5, 75, 0,
+    116, 137, 173, 163, 186, 206, 250, 246, 247, 98, 76, 251, 178, 222, 151,
+    100, 154, 138, 140, 79, 254, 173, 185, 93, 245, 157, 112, 117, 13, 0, 249,
+    35, 170, 91, 207, 242, 204, 163, 154, 121, 243, 252, 5, 35, 77, 217,
+  ]);
+  const meKeypair = umi.eddsa.createKeypairFromSecretKey(myPrivateKey);
+
+  newUmi.use(keypairIdentity(meKeypair));
+
   const metaplex = new Metaplex(connection);
   metaplex.use(waAI(wallet));
+
+  async function createCollectionNFT(
+    payer?: Keypair,
+  ): Promise<CollectionDetails> {
+    const collectionNft = await metaplex.nfts().create({
+      uri: "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/1_46_31/1_46_31.json",
+      name: "Late nft",
+      sellerFeeBasisPoints: 0,
+      updateAuthority: payer,
+      mintAuthority: payer,
+      tokenStandard: 0,
+      symbol: "WHAT",
+      isMutable: true,
+      isCollection: true,
+      creators: [
+        {
+          address: new PublicKey(umi.identity.publicKey),
+          share: 100,
+        },
+      ],
+    });
+
+    console.log("Collection nft address: ", collectionNft.mintAddress);
+
+    return {
+      mint: collectionNft.mintAddress,
+      metadata: collectionNft.metadataAddress,
+    };
+  }
 
   async function getOrCreateCollectionNFT(
     connection: Connection,
@@ -67,20 +108,27 @@ const Page = () => {
   ): Promise<CollectionDetails> {
     const collectionNft = await metaplex.nfts().create({
       uri: "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/1_46_31/1_46_31.json",
-      name: "New test1",
+      name: "Late nft",
       sellerFeeBasisPoints: 0,
       updateAuthority: payer,
       mintAuthority: payer,
       tokenStandard: 0,
-      symbol: "TEST",
+      symbol: "WHAT",
       isMutable: true,
       isCollection: true,
+      creators: [
+        {
+          address: new PublicKey(umi.identity.publicKey),
+          share: 100,
+        },
+      ],
     });
+
+    console.log("Collection nft address: ", collectionNft.mintAddress);
 
     return {
       mint: collectionNft.mintAddress,
       metadata: collectionNft.metadataAddress,
-      // masterEditionAccount: (collectionNft as Nft).edition.address,
     };
   }
 
@@ -135,8 +183,8 @@ const Page = () => {
             treeCreatorOrDelegate: umi.payer,
             tokenMetadataProgram: publicKey(MPL_TOKEN_METADATA_PROGRAM_ID),
             metadata: {
-              name: `${"Under new test1"} ${i}`,
-              symbol: "TEST",
+              name: `${"Late nft"} ${i}`,
+              symbol: "WHAT",
               uri: "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/216_9_20/216_9_20.json",
               sellerFeeBasisPoints: 500, // 5%
               collection: {
@@ -146,8 +194,8 @@ const Page = () => {
               creators: [
                 {
                   address: umi.identity.publicKey,
-                  verified: false,
                   share: 100,
+                  verified: true,
                 },
               ],
             },
@@ -156,9 +204,9 @@ const Page = () => {
         }
 
         const tx = transactionBuilder().add(mintInstructions);
-
         const result = await tx.sendAndConfirm(umi);
         console.log("Transaction result:", result);
+        console.log("mint instructions: ", mintInstructions);
       })
       .catch((err) => {
         console.log(err);

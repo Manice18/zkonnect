@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/zkonnect.json`.
  */
 export type Zkonnect = {
-  address: "LF3zzGufxyKgfVWtMmDiK7B7j4kaxmaGy8dU6mnyPNM";
+  address: "Cse1J9Q4QkfCtjTN9629PgCbTzfug4xfSoKExL83aANh";
   metadata: {
     name: "zkonnect";
     version: "0.1.0";
@@ -39,6 +39,10 @@ export type Zkonnect = {
         },
         {
           name: "mint";
+        },
+        {
+          name: "merkleTree";
+          writable: true;
         },
         {
           name: "collectionNft";
@@ -432,6 +436,10 @@ export type Zkonnect = {
           },
           {
             name: "mint";
+            type: "pubkey";
+          },
+          {
+            name: "merkleTree";
             type: "pubkey";
           },
           {

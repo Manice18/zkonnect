@@ -1,3 +1,7 @@
-import { createCreatorAction, updateCreatorFollowers } from "./SubmitAction";
+import {
+  createCreatorAction,
+  updateCreatorFollowers,
+  getCreatorDataAction,
+} from "./SubmitAction";
 
-export { createCreatorAction, updateCreatorFollowers };
+export { createCreatorAction, updateCreatorFollowers, getCreatorDataAction };

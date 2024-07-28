@@ -23,6 +23,7 @@ export function ConfirmEvent({
   totalTickets,
   tokenType,
   disabled,
+  selectedImage,
 }: {
   onConfirm: () => void;
   eventName: string;
@@ -33,6 +34,7 @@ export function ConfirmEvent({
   totalTickets: number;
   tokenType: string;
   disabled: boolean;
+  selectedImage: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -69,11 +71,11 @@ export function ConfirmEvent({
             </div>
           </div>
           <Image
-            src={bannerUrl}
+            src={selectedImage}
             width={208}
             height={208}
             alt="event banner"
-            className="size-52 bg-red-300"
+            className="size-52"
           />
         </div>
         <DialogFooter className="sm:justify-start">

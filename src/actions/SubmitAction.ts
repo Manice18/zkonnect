@@ -16,7 +16,7 @@ export async function createCreatorAction(
       eventsInaYear: values.expectedNumberOfEvents,
     },
   });
-  return 1;
+  return;
 }
 
 export async function updateCreatorFollowers(
@@ -34,4 +34,17 @@ export async function updateCreatorFollowers(
     },
   });
   return;
+}
+
+export async function getCreatorDataAction(walletAddress: string) {
+  const data = await db.creator.findFirst({
+    where: {
+      walletAddress,
+    },
+  });
+
+  return {
+    creatorName: data?.creatorName,
+    creatorDomain: data?.domainOfExpertise,
+  };
 }

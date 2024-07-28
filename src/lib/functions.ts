@@ -28,32 +28,27 @@ export const shortenWalletAddress = (walletAddress: string, len = 5) => {
   return walletAddress.slice(0, len) + "...." + walletAddress.slice(-len);
 };
 
-async function getOrCreateCollectionNFT(
-  metaplex: Metaplex,
-  creatorName: string,
-  payer?: Keypair,
-): Promise<CollectionDetails> {
-  const collectionNft = await metaplex.nfts().create({
-    uri: "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/1_46_31/1_46_31.json",
-    name: `${creatorName} | Collection`,
-    sellerFeeBasisPoints: 0,
-    updateAuthority: payer,
-    mintAuthority: payer,
-    tokenStandard: 0,
-    symbol: "TEST",
-    isMutable: true,
-    isCollection: true,
+export async function createMerkleTree(totalNFTs: number, umi: Umi) {
+  const { maxDepth, maxBufferSize } = getMaxDepthAndBufferSize(totalNFTs);
+  const maxDepthSizePair: ValidDepthSizePair = {
+    maxDepth: maxDepth,
+    maxBufferSize: maxBufferSize,
+  } as ValidDepthSizePair;
+  const merkleTree = generateSigner(umi);
+
+  const createTreeIx = createTree(umi, {
+    merkleTree,
+    maxDepth: maxDepthSizePair.maxDepth,
+    maxBufferSize: maxDepthSizePair.maxBufferSize,
+    public: false,
+    canopyDepth: 0,
+    compressionProgram: publicKey(SPL_ACCOUNT_COMPRESSION_PROGRAM_ID),
+    logWrapper: publicKey(SPL_NOOP_PROGRAM_ID),
   });
+  console.log("merkle tree:", merkleTree);
+  (await createTreeIx).sendAndConfirm(umi);
 
-  return {
-    mint: collectionNft.mintAddress,
-    metadata: collectionNft.metadataAddress,
-  };
-}
-
-interface DepthBufferSize {
-  maxDepth: 3 | 5 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 24 | 26 | 30;
-  maxBufferSize: 8 | 64 | 256 | 512 | 1024 | 2048;
+  return merkleTree.publicKey;
 }
 
 const depthBufferSizeChart: ValidDepthSizePair[] = [
@@ -96,90 +91,46 @@ function getMaxDepthAndBufferSize(totalTickets: number): ValidDepthSizePair {
   );
 }
 
-export const handleCNFT = async (
-  umi: Umi,
-  wallet: WalletContextState,
-  connection: Connection,
-  metaplex: Metaplex,
-  eventName: string,
-  creatorName: string,
-  totalNFTs: number,
-) => {
-  const { maxDepth, maxBufferSize } = getMaxDepthAndBufferSize(totalNFTs);
-  const maxDepthSizePair: ValidDepthSizePair = {
-    maxDepth: maxDepth,
-    maxBufferSize: maxBufferSize,
-  } as ValidDepthSizePair;
-  const merkleTree = generateSigner(umi);
-  const collectionMint = generateSigner(umi);
+const metadataURL =
+  "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/109_27_59/109_27_59.json";
 
-  const createTreeIx = createTree(umi, {
-    merkleTree,
-    maxDepth: maxDepthSizePair.maxDepth,
-    maxBufferSize: maxDepthSizePair.maxBufferSize,
-    public: false,
-    canopyDepth: 0,
+export function mintToCollection(
+  umi: Umi,
+  creator: UmiPublicKey,
+  eventName: string,
+  userAddr: UmiPublicKey,
+  merkleTree: UmiPublicKey,
+  collectionMint: UmiPublicKey,
+) {
+  const mintTx = mintToCollectionV1(umi, {
+    leafOwner: userAddr,
+    merkleTree: merkleTree,
+    leafDelegate: umi.payer.publicKey,
+    collectionAuthority: umi.payer,
+    collectionAuthorityRecordPda: MPL_BUBBLEGUM_PROGRAM_ID,
+    collectionMint: collectionMint,
     compressionProgram: publicKey(SPL_ACCOUNT_COMPRESSION_PROGRAM_ID),
     logWrapper: publicKey(SPL_NOOP_PROGRAM_ID),
+    treeCreatorOrDelegate: umi.payer,
+    tokenMetadataProgram: publicKey(MPL_TOKEN_METADATA_PROGRAM_ID),
+    metadata: {
+      name: eventName,
+      symbol: "",
+      uri: metadataURL,
+      sellerFeeBasisPoints: 500,
+      collection: {
+        key: publicKey(collectionMint),
+        verified: false,
+      },
+      creators: [
+        {
+          address: creator,
+          verified: false,
+          share: 100,
+        },
+      ],
+    },
   });
-  console.log("merkle tree:", merkleTree);
-  console.log("collection mint:", collectionMint);
-  const data = (await createTreeIx)
-    .sendAndConfirm(umi)
-    .then(async (res) => {
-      const [bubblegumSigner] = PublicKey.findProgramAddressSync(
-        [Buffer.from("collection_cpi", "utf8")],
-        new PublicKey(MPL_BUBBLEGUM_PROGRAM_ID),
-      );
-      const collectionNft = await getOrCreateCollectionNFT(
-        metaplex,
-        creatorName,
-      );
-      const mintInstructions = [];
-      for (let i = 0; i < totalNFTs; i++) {
-        const mintIx = mintToCollectionV1(umi, {
-          leafOwner: new PublicKey(wallet.publicKey!) as any as UmiPublicKey,
-          merkleTree: new PublicKey(
-            merkleTree.publicKey,
-          ) as any as UmiPublicKey,
-          leafDelegate: new PublicKey(wallet.publicKey!) as any as UmiPublicKey,
-          collectionAuthority: umi.payer,
-          collectionAuthorityRecordPda: MPL_BUBBLEGUM_PROGRAM_ID,
-          collectionMint: new PublicKey(
-            collectionNft.mint,
-          ) as any as UmiPublicKey,
-          compressionProgram: publicKey(SPL_ACCOUNT_COMPRESSION_PROGRAM_ID),
-          logWrapper: publicKey(SPL_NOOP_PROGRAM_ID),
-          // bubblegumSigner: publicKey(bubblegumSigner),
-          treeCreatorOrDelegate: umi.payer,
-          tokenMetadataProgram: publicKey(MPL_TOKEN_METADATA_PROGRAM_ID),
-          metadata: {
-            name: `${eventName} ${i}`,
-            symbol: "TEST",
-            uri: "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/216_9_20/216_9_20.json",
-            sellerFeeBasisPoints: 500, // 5%
-            collection: {
-              key: publicKey(collectionNft.mint),
-              verified: false,
-            },
-            creators: [
-              {
-                address: umi.identity.publicKey,
-                verified: false,
-                share: 100,
-              },
-            ],
-          },
-        });
-        mintInstructions.push(mintIx);
-      }
 
-      const tx = transactionBuilder().add(mintInstructions);
-
-      const result = await tx.sendAndConfirm(umi);
-      console.log("Transaction result:", result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+  return mintTx;
+}

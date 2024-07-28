@@ -12,17 +12,32 @@ import {
   TOKEN_2022_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import { PublicKey } from "@solana/web3.js";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
+import {
+  mintToCollectionV1,
+  mintV1,
+  mplBubblegum,
+  MPL_BUBBLEGUM_PROGRAM_ID,
+} from "@metaplex-foundation/mpl-bubblegum";
+import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 
 import idl from "@/lib/solana/idl.json";
 import { Zkonnect } from "@/types/anchor_zkonnect";
 import useAnchorProvider from "./useAnchorProvider";
+import { createMerkleTree } from "@/lib/functions";
 
 export const useZkonnect = () => {
   const wallet = useWallet();
   const anchorProvider = useAnchorProvider();
+  const connection = new Connection(
+    process.env.NEXT_PUBLIC_SOLANA_RPC! || clusterApiUrl("devnet"),
+    "confirmed",
+  );
 
   const anchorWallet = wallet as AnchorWallet;
+  const umi = createUmi(connection).use(mplBubblegum());
+  umi.use(walletAdapterIdentity(wallet));
 
   const program = useMemo(() => {
     if (anchorWallet) {
@@ -55,6 +70,7 @@ export const useZkonnect = () => {
     totalTickets,
     tokenType,
     collectionNft,
+    merkleTreeAddr,
   }: {
     eventName: string;
     eventDescription: string;
@@ -67,6 +83,7 @@ export const useZkonnect = () => {
     totalTickets: number;
     tokenType: string;
     collectionNft: string;
+    merkleTreeAddr: PublicKey;
   }) => {
     if (!program) {
       throw new Error("Program not initialized");
@@ -75,6 +92,18 @@ export const useZkonnect = () => {
       toast.error("Wallet not connected");
       return;
     }
+
+    console.log("event name", eventName);
+    console.log("creator name", creatorName);
+    console.log("creator domain", creatorDomain);
+    console.log("event description", eventDescription);
+    console.log("banner url", bannerUrl);
+    console.log("date time", dateTime);
+    console.log("location", location);
+    console.log("ticket price", ticketPrice);
+    console.log("total tickets", totalTickets);
+    console.log("token type", tokenType);
+    console.log("collection nft", collectionNft);
 
     const usdcMintAddr = new PublicKey(
       "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
@@ -87,6 +116,8 @@ export const useZkonnect = () => {
     const mintAmount = new BN(ticketPrice).mul(
       new BN(10).pow(new BN(mintInfo.decimals)),
     );
+
+    const merkleTreePubKey = await createMerkleTree(totalTickets, umi);
 
     try {
       return program.methods
@@ -107,6 +138,7 @@ export const useZkonnect = () => {
           collectionNft: new PublicKey(collectionNft),
           mint: usdcMintAddr,
           tokenProgram: tokenProgram,
+          merkleTree: merkleTreePubKey,
         })
         .rpc();
     } catch (e) {
