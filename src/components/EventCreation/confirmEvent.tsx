@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { CircleCheck, MoveRight } from "lucide-react";
+import { ConfirmPreview } from "./confirmPreview";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -37,6 +39,10 @@ export function ConfirmEvent({
   selectedImage: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const handleConfirm = () => {
+    onConfirm();
+    setIsOpen((p: boolean) => !p);
+  };
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -90,10 +96,7 @@ export function ConfirmEvent({
             >
               Cancel
             </Button>
-            <Button onClick={onConfirm} size="default" className="text-xs">
-              <CircleCheck size={16} className="mr-2" />
-              Confirm
-            </Button>
+            <ConfirmPreview onConfirm={handleConfirm} bannerUrl={bannerUrl} />
           </div>
         </DialogFooter>
       </DialogContent>
