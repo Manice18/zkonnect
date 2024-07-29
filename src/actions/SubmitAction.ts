@@ -16,5 +16,35 @@ export async function createCreatorAction(
       eventsInaYear: values.expectedNumberOfEvents,
     },
   });
-  return 1;
+  return;
+}
+
+export async function updateCreatorFollowers(
+  walletAddress: string,
+  noOfFollowers: number,
+  isVerified: boolean,
+) {
+  await db.creator.update({
+    where: {
+      walletAddress,
+    },
+    data: {
+      noOfFollowers,
+      isVerified,
+    },
+  });
+  return;
+}
+
+export async function getCreatorDataAction(walletAddress: string) {
+  const data = await db.creator.findFirst({
+    where: {
+      walletAddress,
+    },
+  });
+
+  return {
+    creatorName: data?.creatorName,
+    creatorDomain: data?.domainOfExpertise,
+  };
 }

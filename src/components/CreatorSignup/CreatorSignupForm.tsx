@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -37,7 +38,7 @@ const CreatorSignupForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof creatorSignupFormSchema>) {
-    if (publicKey === null || !connected) {
+    if (!publicKey || !connected) {
       toast.error("Please connect your wallet first");
       return;
     }
@@ -55,7 +56,7 @@ const CreatorSignupForm = () => {
       });
 
       toast.promise(promise, {
-        loading: "Verifying...",
+        loading: "Creating...",
         success: "Profile Created, now taking you to verification page.",
         error: "Error creating profile. Please try again.",
       });

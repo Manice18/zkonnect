@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Logo from "@/components/Common/Logo";
+import Link from "next/link";
 
 import { useScrollTop } from "@/hooks/use-scroll-top";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/Common/Logo";
 import WalletConnectButton from "@/components/Wallet/wallet-connect-button";
-import Link from "next/link";
 
 const Navbar = ({
   requireLogin = true,

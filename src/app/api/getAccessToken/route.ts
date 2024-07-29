@@ -30,6 +30,8 @@ export async function POST(request: NextRequest) {
     roomId: roomId,
   });
 
+  console.log(roomDetails);
+
   if (!roomDetails?.tokenGatingInfo) {
     return NextResponse.json(
       { error: "Room is not token gated" },

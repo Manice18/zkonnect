@@ -22,6 +22,7 @@ model Creator {
   domainOfExpertise String
   eventsInaYear     Int
   noOfFollowers     Int      @default(0)
+  isVerified        Boolean  @default(false)
   Events            Events[]
 }
 

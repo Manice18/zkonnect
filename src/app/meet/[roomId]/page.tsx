@@ -4,18 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 
 import {
-  useLocalAudio,
-  useLocalPeer,
-  useLocalScreenShare,
-  useLocalVideo,
-  usePeerIds,
-  useRoom,
-} from "@huddle01/react/hooks";
-import { useWallet } from "@solana/wallet-adapter-react";
-import ChatBox from "@/components/ChatBox/ChatBox";
-import RemotePeer from "@/components/RemotePeer/RemotePeer";
-import { handleSignIn } from "@/components/SignIn";
-import {
   Disc2,
   Dot,
   Mic,
@@ -24,8 +12,21 @@ import {
   Video,
   VideoOff,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import {
+  useLocalAudio,
+  useLocalPeer,
+  useLocalScreenShare,
+  useLocalVideo,
+  usePeerIds,
+  useRoom,
+} from "@huddle01/react/hooks";
+import { useWallet } from "@solana/wallet-adapter-react";
+
 import { cn } from "@/lib/utils";
+import ChatBox from "@/components/ChatBox/ChatBox";
+import RemotePeer from "@/components/RemotePeer/RemotePeer";
+import { handleSignIn } from "@/components/SignIn";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 type TPeerMetadata = {
@@ -39,8 +40,6 @@ export default function Page() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const wallet = useWallet();
   const params = useParams();
-
-  console.log(params.roomId);
 
   const { joinRoom, state } = useRoom({
     onJoin: (room) => {
