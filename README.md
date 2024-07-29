@@ -3,16 +3,18 @@
 # zKonnect
 
 zKonnect is a blockchain-based application designed to help creators host their events seamlessly in a decentralized environment. Built on the Solana blockchain, zKonnect leverages the power of decentralization to provide a secure, efficient, and user-friendly platform for event management and ticketing.
+It uses **Huddle01SDK** for token-gated rooms and **Reclaim Protocol** to get a zk-proof of the number of followers of a creator.
 
 ## Features
 
 - **Decentralized Event Hosting**: Create and manage events on the Solana blockchain.
 - **Seamless Payments**: Utilize Solana's fast and low-cost transactions for ticket purchases.
 - **In-App Currency**: Use Blinks as an in-app currency for various transactions.
-- **NFT Ticketing**: Provide attendees with unique NFTs as event tickets and memorabilia.
-- **AI Integration** : We aim to provide fastest possible event organization experience to the user with AI chatbot to extract event data from the user's chat to directly create an event.
+- **cNFT Ticketing**: Provide attendees with unique NFTs as event tickets and memorabilia.
+- **Multi-token Payment**: Currently we give options for creators to accept payments in Sol, USDC, and are willing to expand more.
 - **Creator Tools**: Comprehensive tools for event creation, management, and analytics.
 - **Audience Engagement**: Interactive features to enhance the event experience for attendees.
+- **AI Integration** : We aim to provide fastest possible event organization experience to the user with AI chatbot to extract event data from the user's chat to directly create an event.
 
 ## Technology Stack
 
@@ -36,9 +38,9 @@ zKonnect is a blockchain-based application designed to help creators host their 
 - [YouTube](https://youtu.be/qprTSTpP9zQ)
 
 ### Blink Working proof:
-- https://dial.to/?action=solana-action:https://zkonnect.vercel.app/api/actions/6684604f1e0b925d5fef7487
-  <img width="548" alt="image" src="https://github.com/user-attachments/assets/8abef5d7-d378-48ec-a45b-5edea23d284a">
 
+- https://dial.to/?action=solana-action:https://zkonnect.vercel.app/api/actions/support?eventName=An%20online%20event&address=8SxxZLiRpQT4WAk4kg1VyfbEvraKJj6DamfZJJoMQtKG
+  <img width="548" alt="image" src="https://github.com/user-attachments/assets/8abef5d7-d378-48ec-a45b-5edea23d284a">
 
 ### Prerequisites
 
@@ -55,7 +57,9 @@ zKonnect is a blockchain-based application designed to help creators host their 
 5. Go to [Reclaim](https://dev.reclaimprotocol.org/) and create your app by select the linkedin equal provider and paste the keys under RECLAIM_APP_ID and RECLAIM_SECRET_KEY respectively.
 6. Put NEXT_PUBLIC_ENVIRONMENT value as localhost.
 7. Get the DATABASE_URL by creating a db from MongoDB.
-8. Grab your NEXT_PUBLIC_SOLANA_RPC url from your choice of RPC provider and put the value, or the default solana rpc will be used (I'll suggest get one from [Heilus](https://www.helius.dev/)).
+8. Get your Pinata_JWT from Pinata Cloud.
+9. Get a account whole private key can be used for NFT creating and put it under NFT_SIGNER_PVT_KEY, make sure it has enough SOL.
+10. Grab your NEXT_PUBLIC_SOLANA_RPC url from your choice of RPC provider and put the value, or the default solana rpc will be used (I'll suggest get one from [Heilus](https://www.helius.dev/)).
 
 ## Getting Started
 
