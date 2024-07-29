@@ -14,12 +14,7 @@ import {
 } from "@solana/spl-token";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import {
-  mintToCollectionV1,
-  mintV1,
-  mplBubblegum,
-  MPL_BUBBLEGUM_PROGRAM_ID,
-} from "@metaplex-foundation/mpl-bubblegum";
+import { mplBubblegum } from "@metaplex-foundation/mpl-bubblegum";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 
 import idl from "@/lib/solana/idl.json";
@@ -91,18 +86,6 @@ export const useZkonnect = () => {
       toast.error("Wallet not connected");
       return;
     }
-
-    console.log("event name", eventName);
-    console.log("creator name", creatorName);
-    console.log("creator domain", creatorDomain);
-    console.log("event description", eventDescription);
-    console.log("banner url", bannerUrl);
-    console.log("date time", dateTime);
-    console.log("location", location);
-    console.log("ticket price", ticketPrice);
-    console.log("total tickets", totalTickets);
-    console.log("token type", tokenType);
-    console.log("collection nft", collectionNft);
 
     const usdcMintAddr = new PublicKey(
       "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
@@ -254,8 +237,6 @@ export const useZkonnect = () => {
       throw new Error("Program not initialized");
     }
     const creatorAccounts = await program.account.event.all();
-
-    console.log(creatorAccounts);
 
     return creatorAccounts;
   };

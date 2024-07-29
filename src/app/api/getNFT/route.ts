@@ -1,43 +1,81 @@
-import { mintToCollection } from "@/lib/functions";
-import { Metaplex, keypairIdentity as KAI } from "@metaplex-foundation/js";
+import { NextRequest } from "next/server";
+
 import {
   keypairIdentity,
   publicKey,
   transactionBuilder,
 } from "@metaplex-foundation/umi";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
-import { NextRequest } from "next/server";
+import { clusterApiUrl, Connection } from "@solana/web3.js";
+import {
+  mintToCollectionV1,
+  MPL_BUBBLEGUM_PROGRAM_ID,
+} from "@metaplex-foundation/mpl-bubblegum";
+import { MPL_TOKEN_METADATA_PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
 
-const myPrivateKey = Uint8Array.from([
-  18, 127, 152, 242, 81, 58, 14, 97, 54, 82, 28, 4, 105, 231, 85, 5, 75, 0, 116,
-  137, 173, 163, 186, 206, 250, 246, 247, 98, 76, 251, 178, 222, 151, 100, 154,
-  138, 140, 79, 254, 173, 185, 93, 245, 157, 112, 117, 13, 0, 249, 35, 170, 91,
-  207, 242, 204, 163, 154, 121, 243, 252, 5, 35, 77, 217,
-]);
+import {
+  SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
+  SPL_NOOP_PROGRAM_ID,
+} from "@solana/spl-account-compression";
+
+import { PublicKey as UmiPublicKey, Umi } from "@metaplex-foundation/umi";
+
+const secret = JSON.parse(process.env.NFT_SIGNER_PVT_KEY ?? "") as number[];
+const myPrivateKey = Uint8Array.from(secret);
 
 const connection = new Connection(
   process.env.NEXT_PUBLIC_SOLANA_RPC! || clusterApiUrl("devnet"),
   "confirmed",
 );
 
-const umi = createUmi(connection);
-
-umi.use(keypairIdentity(umi.eddsa.createKeypairFromSecretKey(myPrivateKey)));
-
-const metaplex = new Metaplex(connection);
-metaplex.use(KAI(Keypair.fromSecretKey(myPrivateKey)));
-
-const NFTURL =
+const metadataURL =
   "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/109_27_59/109_27_59.json";
 
+function mintToCollection(
+  umi: Umi,
+  creator: UmiPublicKey,
+  eventName: string,
+  userAddr: UmiPublicKey,
+  merkleTree: UmiPublicKey,
+  collectionMint: UmiPublicKey,
+) {
+  const mintTx = mintToCollectionV1(umi, {
+    leafOwner: userAddr,
+    merkleTree: merkleTree,
+    leafDelegate: umi.payer.publicKey,
+    collectionAuthority: umi.payer,
+    collectionAuthorityRecordPda: MPL_BUBBLEGUM_PROGRAM_ID,
+    collectionMint: collectionMint,
+    compressionProgram: publicKey(SPL_ACCOUNT_COMPRESSION_PROGRAM_ID),
+    logWrapper: publicKey(SPL_NOOP_PROGRAM_ID),
+    treeCreatorOrDelegate: umi.payer,
+    tokenMetadataProgram: publicKey(MPL_TOKEN_METADATA_PROGRAM_ID),
+    metadata: {
+      name: eventName,
+      symbol: "",
+      uri: metadataURL,
+      sellerFeeBasisPoints: 500,
+      collection: {
+        key: publicKey(collectionMint),
+        verified: false,
+      },
+      creators: [
+        {
+          address: creator,
+          verified: false,
+          share: 100,
+        },
+      ],
+    },
+  });
+
+  return mintTx;
+}
+
+const umi = createUmi(connection);
+umi.use(keypairIdentity(umi.eddsa.createKeypairFromSecretKey(myPrivateKey)));
+
 export const POST = async (req: NextRequest) => {
-  const searchParams = req.nextUrl.searchParams;
-  // const creatorAddress = searchParams.get("creatorAddress");
-  // const merkleTreeAddr = searchParams.get("merkleTreeAddr");
-  // const collectionNFTAddr = searchParams.get("collectionNFTAddr");
-  // const toUserAddr = searchParams.get("toUserAddr");
-  // const eventName = searchParams.get("eventName");
   const {
     creatorAddress,
     merkleTreeAddr,
@@ -87,8 +125,6 @@ export const POST = async (req: NextRequest) => {
   const tx = await transactionBuilder()
     .add(mintInstructions)
     .sendAndConfirm(umi);
-
-  console.log("Transaction: ", tx);
 
   return new Response("Success", {
     status: 200,

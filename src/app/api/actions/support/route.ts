@@ -1,3 +1,5 @@
+import { NextRequest } from "next/server";
+
 import {
   ActionPostResponse,
   ACTIONS_CORS_HEADERS,
@@ -5,25 +7,28 @@ import {
   ActionPostRequest,
 } from "@solana/actions";
 import { clusterApiUrl, PublicKey } from "@solana/web3.js";
-import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
-
-import { Program, web3 } from "@coral-xyz/anchor";
-import { Zkonnect } from "@/types/anchor_zkonnect";
-import idl from "@/lib/solana/idl.json";
 import {
   TOKEN_2022_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
   getAssociatedTokenAddressSync,
+  getMint,
 } from "@solana/spl-token";
-import { NextRequest } from "next/server";
+import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+import { Program, web3 } from "@coral-xyz/anchor";
 
-type PostParams = {
-  eventAccountPda: string;
-};
+import { Zkonnect } from "@/types/anchor_zkonnect";
+import idl from "@/lib/solana/idl.json";
 
 const isToken2022 = async (mint: PublicKey) => {
   const mintInfo = await connection.getAccountInfo(mint);
   return mintInfo?.owner.equals(TOKEN_2022_PROGRAM_ID);
+};
+const getMintInfo = async (mint: PublicKey) => {
+  const tokenProgram = (await isToken2022(mint))
+    ? TOKEN_2022_PROGRAM_ID
+    : TOKEN_PROGRAM_ID;
+
+  return getMint(connection, mint, undefined, tokenProgram);
 };
 
 const connection = new web3.Connection(
@@ -35,10 +40,10 @@ const program = new Program<Zkonnect>(idl as Zkonnect, {
 });
 
 export const GET = async (req: NextRequest) => {
-  //   console.log(params.eventName);
   const searchParams = req.nextUrl.searchParams;
   const eventName = searchParams.get("eventName");
   const address = searchParams.get("address");
+
   if (!eventName) {
     return new Response("Invalid eventId", {
       status: 400,
@@ -65,25 +70,34 @@ export const GET = async (req: NextRequest) => {
     try {
       const requestUrl = new URL(req.url);
       const baseHref = new URL(
-        `/api/actions/${profilePda.toString()}`,
+        `/api/actions/support?eventAccountPda=${profilePda.toString()}`,
         requestUrl.origin,
       ).toString();
-      // const { toPubkey } = validatedQueryParams(requestUrl);
 
-      // const baseHref = new URL(
-      //   `/api/actions/${eventAccount.eventName}?to=${eventAccount.creator}`,
-      //   requestUrl.origin,
-      // ).toString();
+      let actualPrice;
+
+      if (eventAccount.paySol === 1) {
+        const usdcMintAddr = new PublicKey(
+          "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+        );
+        const mintInfo = await getMintInfo(usdcMintAddr);
+
+        // Convert the BN ticket price to its actual value
+        actualPrice =
+          eventAccount.ticketPrice.toNumber() / Math.pow(10, mintInfo.decimals);
+      } else {
+        actualPrice = eventAccount.ticketPrice;
+      }
 
       const payload: ActionGetResponse = {
         title: eventAccount.eventName,
-        icon: eventAccount.banner, // Use the remote URL here
+        icon: eventAccount.banner,
         description: eventAccount.eventDescription,
         label: "Get Your Ticket", // this value will be ignored since `links.actions` exists
         links: {
           actions: [
             {
-              label: `Send ${eventAccount.ticketPrice} ${eventAccount.paySol === 0 ? "SOL" : "USDC"}`, // button text
+              label: `Send ${actualPrice} ${eventAccount.paySol === 0 ? "SOL" : "USDC"}`, // button text
               href: `${baseHref}`,
             },
           ],
@@ -105,21 +119,17 @@ export const GET = async (req: NextRequest) => {
   }
 };
 
-// DO NOT FORGET TO INCLUDE THE `OPTIONS` HTTP METHOD
-// THIS WILL ENSURE CORS WORKS FOR BLINKS
 export const OPTIONS = GET;
 
-export const POST = async (
-  req: Request,
-  { params }: { params: PostParams },
-) => {
+export const POST = async (req: Request) => {
+  const { searchParams } = new URL(req.url);
+  const eventAccountPda = searchParams.get("eventAccountPda");
+
   try {
     const body: ActionPostRequest = await req.json();
     const { account } = body;
     const authority = new web3.PublicKey(account);
-    const eventAccount = await program.account.event.fetch(
-      params.eventAccountPda,
-    );
+    const eventAccount = await program.account.event.fetch(eventAccountPda!);
     const [profilePda] = PublicKey.findProgramAddressSync(
       [
         Buffer.from("zkonnect"),
@@ -129,12 +139,19 @@ export const POST = async (
       program.programId,
     );
 
-    // validate the client provided input
-
     let ix: web3.TransactionInstruction;
 
     try {
-      if (eventAccount.paySol !== 0) {
+      if (eventAccount.paySol === 0) {
+        ix = await program.methods
+          .paySolForTicket()
+          .accountsPartial({
+            to: eventAccount.creator,
+            from: authority,
+            event: profilePda,
+          })
+          .instruction();
+      } else {
         const tokenProgram = (await isToken2022(eventAccount.mint))
           ? TOKEN_2022_PROGRAM_ID
           : TOKEN_PROGRAM_ID;
@@ -165,15 +182,6 @@ export const POST = async (
             mint: eventAccount.mint,
           })
           .instruction();
-      } else {
-        ix = await program.methods
-          .paySolForTicket()
-          .accountsPartial({
-            to: eventAccount.creator,
-            from: authority,
-            event: profilePda,
-          })
-          .instruction();
       }
 
       const blockhash = await connection
@@ -193,7 +201,7 @@ export const POST = async (
 
       const url = new URL(req.url);
 
-      const res = await fetch(`${url.origin}/api/getNFT`, {
+      await fetch(`${url.origin}/api/getNFT`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -206,8 +214,6 @@ export const POST = async (
           eventName: eventAccount.eventName,
         }),
       });
-
-      console.log("get nft result", res);
 
       return Response.json(payload, {
         headers: ACTIONS_CORS_HEADERS,

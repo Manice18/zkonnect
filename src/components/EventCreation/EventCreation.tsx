@@ -1,30 +1,19 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { z } from "zod";
 import { useForm, useFormState } from "react-hook-form";
 import { toast } from "sonner";
-import {
-  MoveRight,
-  Calendar as CalendarIcon,
-  Upload,
-  CircleUserRound,
-} from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import {
-  mintToCollectionV1,
-  mintV1,
-  mplBubblegum,
-  MPL_BUBBLEGUM_PROGRAM_ID,
-} from "@metaplex-foundation/mpl-bubblegum";
+import { mplBubblegum } from "@metaplex-foundation/mpl-bubblegum";
 import {
   Metaplex,
-  Nft,
   walletAdapterIdentity as waAI,
 } from "@metaplex-foundation/js";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
@@ -57,17 +46,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useZkonnect } from "@/hooks/useZkonnect";
-import { useState } from "react";
-import { ConfirmEvent } from "./confirmEvent";
-import Image from "next/image";
-import UploadDropzone from "../Common/UploadDropzone";
-import { createMerkleTree } from "@/lib/functions";
+import UploadDropzone from "@/components/Common/UploadDropzone";
 import { getCreatorDataAction } from "@/actions";
+import { ConfirmEvent } from "./confirmEvent";
 
 type EventCreationFormSchemaType = z.infer<typeof eventCreationFormSchema>;
 
 const EventCreation = () => {
-  const router = useRouter();
   const wallet = useWallet();
   const connection = new Connection(
     process.env.NEXT_PUBLIC_SOLANA_RPC! || clusterApiUrl("devnet"),
@@ -79,11 +64,9 @@ const EventCreation = () => {
   const metaplex = new Metaplex(connection);
   metaplex.use(waAI(wallet));
 
-  const { createTheEvent, payforTicket, closeAccount, getAllCreatorAccounts } =
-    useZkonnect();
+  const { createTheEvent, closeAccount, getAllCreatorAccounts } = useZkonnect();
 
   const [allEvents, setAllEvents] = useState<any>([]);
-  const [cid, setCid] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const form = useForm<EventCreationFormSchemaType>({
@@ -120,47 +103,51 @@ const EventCreation = () => {
         })
           .then(async (response) => {
             const uploadedImage = await response.json();
-            console.log(uploadedImage);
-            setCid(uploadedImage.IpfsHash);
-            const bannerUrl = `https://${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`;
-            console.log(bannerUrl);
-            await createMerkleTree(values.totalTickets, umi).then(
-              async (merkleTreeAddr) => {
-                const { creatorDomain, creatorName } =
-                  await getCreatorDataAction(wallet.publicKey!.toString());
-
-                const response = await fetch(
-                  `/api/createCollectionNft/?eventName=${values.eventName}&creatorAddress=${wallet.publicKey!.toString()}`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      creatorAddress: wallet.publicKey!.toString(),
-                      eventName: values.eventName,
-                    }),
-                  },
-                );
-                const collectionNftAddr = await response.json();
-
-                await createTheEvent({
-                  eventName: values.eventName,
-                  eventDescription: values.eventDescription,
-                  creatorName: creatorName!,
-                  creatorDomain: creatorDomain!,
-                  bannerUrl: bannerUrl,
-                  dateTime: values.eventDate.getTime(),
-                  location: values.location,
-                  ticketPrice: values.ticketPrice,
-                  totalTickets: values.totalTickets,
-                  tokenType: values.nativePaymentToken,
-                  collectionNft: collectionNftAddr.mint,
-                  merkleTreeAddr: new PublicKey(merkleTreeAddr),
-                });
-                console.log(values);
+            const bannerUrl = `https://${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${uploadedImage.IpfsHash}`;
+            const createMerkle = await fetch(`/api/createMerkleTree`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
               },
-            );
+              body: JSON.stringify({
+                totalNFTs: values.totalTickets,
+              }),
+            });
+            await createMerkle.json().then(async (merkleTreeAddr) => {
+              const { creatorDomain, creatorName } = await getCreatorDataAction(
+                wallet.publicKey!.toString(),
+              );
+
+              const response = await fetch(
+                `/api/createCollectionNft/?eventName=${values.eventName}&creatorAddress=${wallet.publicKey!.toString()}`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    creatorAddress: wallet.publicKey!.toString(),
+                    eventName: values.eventName,
+                  }),
+                },
+              );
+              const collectionNftAddr = await response.json();
+
+              await createTheEvent({
+                eventName: values.eventName,
+                eventDescription: values.eventDescription,
+                creatorName: creatorName!,
+                creatorDomain: creatorDomain!,
+                bannerUrl: bannerUrl,
+                dateTime: values.eventDate.getTime(),
+                location: values.location,
+                ticketPrice: values.ticketPrice,
+                totalTickets: values.totalTickets,
+                tokenType: values.nativePaymentToken,
+                collectionNft: collectionNftAddr.mint,
+                merkleTreeAddr: new PublicKey(merkleTreeAddr.merkleTreeAddr),
+              });
+            });
           })
           .then(() => {
             resolve();
@@ -176,30 +163,6 @@ const EventCreation = () => {
     } catch (error) {
       console.error("Error uploading images:", error);
     }
-
-    // await createTheEvent({
-    //   eventName: values.eventName,
-    //   eventDescription: values.eventDescription,
-    //   creatorName: "John Doe",
-    //   creatorDomain: "singing",
-    //   bannerUrl: values.bannerUrl,
-    //   dateTime: values.eventDate.getTime(),
-    //   location: values.location,
-    //   ticketPrice: values.ticketPrice,
-    //   totalTickets: values.totalTickets,
-    //   tokenType: values.nativePaymentToken,
-    //   collectionNft: values.collectionNft,
-    // });
-
-    // toast.success("Event creation successful", {
-    //   description: "Go to dashboard to view your event",
-    //   position: "bottom-center",
-    //   action: {
-    //     label: "dashboard",
-    //     onClick: () => router.push("/creator/dashboard"),
-    //   },
-    // });
-    // form.reset();
   }
 
   return (
@@ -429,7 +392,6 @@ const EventCreation = () => {
           onConfirm={form.handleSubmit(onSubmit)}
           eventName={form.getValues().eventName}
           eventDescription={form.getValues().eventDescription}
-          bannerUrl={form.getValues().bannerUrl}
           dateTime={form.getValues().eventDate.toLocaleDateString()}
           ticketPrice={form.getValues().ticketPrice}
           totalTickets={form.getValues().totalTickets}
@@ -437,11 +399,12 @@ const EventCreation = () => {
           selectedImage={
             selectedImage !== null ? URL.createObjectURL(selectedImage) : ""
           }
+          walletAddr={wallet.publicKey?.toString()}
         />
         <label
           className="cursor-pointer rounded-md bg-black p-2 text-center text-white"
           onClick={() => {
-            closeAccount("An online event")
+            closeAccount(allEvents[0].account.eventName)
               .then(() => {
                 toast.success("Account closed successfully");
               })

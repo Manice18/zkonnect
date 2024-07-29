@@ -41,8 +41,6 @@ export default function Page() {
   const wallet = useWallet();
   const params = useParams();
 
-  console.log(params.roomId);
-
   const { joinRoom, state } = useRoom({
     onJoin: (room) => {
       console.log("onJoin", room);

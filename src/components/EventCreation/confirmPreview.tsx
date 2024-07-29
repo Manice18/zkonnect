@@ -1,6 +1,7 @@
-import { Copy, Check } from "lucide-react";
-import { CircleCheck } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
+
+import { Copy, Check, CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,24 +12,22 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 import { Label } from "@/components/ui/label";
 
 export function ConfirmPreview({
   onConfirm,
   bannerUrl,
+  blinkUrl,
 }: {
   onConfirm: () => void;
   bannerUrl: string;
+  blinkUrl: string | undefined;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [copiedBlink, setCopiedBlink] = useState<boolean>(false);
   const [copiedMeet, setCopiedMeet] = useState<boolean>(false);
-  const [blinkUrl, setBlinkUrl] = useState<string>(
-    "https://zkonnect.blinks.com/event",
-  );
   const [meetUrl, setMeetUrl] = useState<string>(
-    "https://zkonnect.meet.com/id",
+    "https://zkonnect.vercel.app/meet",
   );
 
   const onCopy = (url: string, setCopied: (value: boolean) => void) => {
@@ -44,7 +43,10 @@ export function ConfirmPreview({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          onClick={() => setIsOpen((p: boolean) => !p)}
+          onClick={() => {
+            onConfirm();
+            setIsOpen((p: boolean) => !p);
+          }}
           size="default"
           className="text-xs"
         >
@@ -83,13 +85,23 @@ export function ConfirmPreview({
                 id="blink-link"
                 value={blinkUrl}
                 readOnly
-                onClick={() => onCopy(blinkUrl, setCopiedBlink)}
+                onClick={() =>
+                  onCopy(
+                    blinkUrl || "https://zkonnect.vercel.app/meet",
+                    setCopiedBlink,
+                  )
+                }
               />
               <Button
                 type="submit"
                 size="sm"
-                className="h-full bg-[#808080] px-3"
-                onClick={() => onCopy(blinkUrl, setCopiedBlink)}
+                className="h-full px-3"
+                onClick={() =>
+                  onCopy(
+                    blinkUrl || "https://zkonnect.vercel.app/meet",
+                    setCopiedBlink,
+                  )
+                }
                 disabled={copiedBlink}
               >
                 <span className="sr-only">Copy</span>
@@ -120,7 +132,7 @@ export function ConfirmPreview({
               <Button
                 type="submit"
                 size="sm"
-                className="h-full bg-[#808080] px-3"
+                className="h-full px-3"
                 onClick={() => onCopy(meetUrl, setCopiedMeet)}
                 disabled={copiedMeet}
               >

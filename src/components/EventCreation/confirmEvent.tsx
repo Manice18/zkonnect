@@ -19,28 +19,32 @@ export function ConfirmEvent({
   onConfirm,
   eventName,
   eventDescription,
-  bannerUrl,
   dateTime,
   ticketPrice,
   totalTickets,
   tokenType,
   disabled,
   selectedImage,
+  walletAddr,
 }: {
   onConfirm: () => void;
   eventName: string;
   eventDescription: string;
-  bannerUrl: string;
   dateTime: string;
   ticketPrice: number;
   totalTickets: number;
   tokenType: string;
   disabled: boolean;
   selectedImage: string;
+  walletAddr: string | undefined;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [blinkUrl, setBlinkUrl] = useState<string>();
   const handleConfirm = () => {
     onConfirm();
+    setBlinkUrl(
+      `${window.location.origin}/api/actions/support?eventName=${eventName}&address=${walletAddr}`,
+    );
     setIsOpen((p: boolean) => !p);
   };
   return (
@@ -96,7 +100,11 @@ export function ConfirmEvent({
             >
               Cancel
             </Button>
-            <ConfirmPreview onConfirm={handleConfirm} bannerUrl={bannerUrl} />
+            <ConfirmPreview
+              onConfirm={handleConfirm}
+              bannerUrl={selectedImage}
+              blinkUrl={blinkUrl}
+            />
           </div>
         </DialogFooter>
       </DialogContent>

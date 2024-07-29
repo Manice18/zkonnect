@@ -1,13 +1,11 @@
 "use client";
 
+import { Copy, CalendarIcon, CircleCheck } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { CircleCheck, MoveRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Copy } from "lucide-react";
-import Image from "next/image";
-import { CalendarIcon, LinkIcon, EyeIcon } from "lucide-react";
 
 interface EventPageProps {
   params: {
@@ -44,7 +42,9 @@ export default function EventPage({ params }: EventPageProps) {
               <p className="mb-8">{params.desc}</p>
 
               <h3 className="mb-2 text-xl font-bold">Ticket Details</h3>
-              <p className="mb-2 text-gray-600">Here's the detailed listing:</p>
+              <p className="mb-2 text-gray-600">
+                Here&apos;s the detailed listing:
+              </p>
               <div className="mb-8 grid grid-cols-3 gap-4">
                 <div>
                   <p className="font-bold">Price</p>
