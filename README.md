@@ -39,8 +39,9 @@ It uses **Huddle01SDK** for token-gated rooms and **Reclaim Protocol** to get a 
 
 ### Blink Working proof:
 
-- https://dial.to/?action=solana-action:https://zkonnect.vercel.app/api/actions/support?eventName=An%20online%20event&address=8SxxZLiRpQT4WAk4kg1VyfbEvraKJj6DamfZJJoMQtKG
-  <img width="548" alt="image" src="https://github.com/user-attachments/assets/8abef5d7-d378-48ec-a45b-5edea23d284a">
+- [Dial.to](https://dial.to/?action=solana-action%3Ahttps%3A%2F%2Fzkonnect.vercel.app%2Fapi%2Factions%2Fsupport%3FeventName%3DAn%20online%20event%26address%3D8SxxZLiRpQT4WAk4kg1VyfbEvraKJj6DamfZJJoMQtKG)
+<br/><img width="646" alt="image" src="https://github.com/user-attachments/assets/4b6e64fd-a0f2-4415-8dd2-fc72ae1cd501">
+
 
 ### Prerequisites
 
