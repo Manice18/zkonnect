@@ -212,6 +212,7 @@ export const POST = async (req: Request) => {
           collectionNFTAddr: eventAccount.collectionNft.toString(),
           toUserAddr: account,
           eventName: eventAccount.eventName,
+          nftUri: eventAccount.nfturi,
         }),
       });
 
