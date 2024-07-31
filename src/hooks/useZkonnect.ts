@@ -60,6 +60,7 @@ export const useZkonnect = () => {
     bannerUrl,
     dateTime,
     location,
+    nftUri,
     ticketPrice,
     totalTickets,
     tokenType,
@@ -73,6 +74,7 @@ export const useZkonnect = () => {
     bannerUrl: string;
     dateTime: number;
     location: string;
+    nftUri: string;
     ticketPrice: number;
     totalTickets: number;
     tokenType: string;
@@ -109,6 +111,7 @@ export const useZkonnect = () => {
           bannerUrl,
           new BN(dateTime),
           location,
+          nftUri,
           mintAmount,
           new BN(totalTickets),
           tokenType === "USDC" ? new BN(1) : new BN(0),

@@ -11,16 +11,14 @@ const connection = new Connection(
   "confirmed",
 );
 
-const NFTURL =
-  "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/234_157_140/234_157_140.json";
-
 async function getOrCreateCollectionNFT(
   metaplex: Metaplex,
   eventName: string,
   creatorAddr: string,
+  nftUri: string,
 ) {
   const collectionNft = await metaplex.nfts().create({
-    uri: NFTURL,
+    uri: nftUri,
     name: eventName,
     sellerFeeBasisPoints: 0,
     updateAuthority: Keypair.fromSecretKey(myPrivateKey),
@@ -47,13 +45,14 @@ const metaplex = new Metaplex(connection);
 metaplex.use(keypairIdentity(Keypair.fromSecretKey(myPrivateKey)));
 
 export const POST = async (req: NextRequest) => {
-  const { eventName, creatorAddress } = await req.json();
+  const { eventName, creatorAddress, nftUri } = await req.json();
 
   try {
     const { metadata, mint } = await getOrCreateCollectionNFT(
       metaplex,
-      eventName!,
-      creatorAddress!,
+      eventName,
+      creatorAddress,
+      nftUri,
     );
     return NextResponse.json(
       {

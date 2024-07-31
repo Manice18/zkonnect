@@ -28,9 +28,6 @@ const connection = new Connection(
   "confirmed",
 );
 
-const metadataURL =
-  "https://raw.githubusercontent.com/Unboxed-Software/rgb-png-generator/master/assets/109_27_59/109_27_59.json";
-
 function mintToCollection(
   umi: Umi,
   creator: UmiPublicKey,
@@ -38,6 +35,7 @@ function mintToCollection(
   userAddr: UmiPublicKey,
   merkleTree: UmiPublicKey,
   collectionMint: UmiPublicKey,
+  nftUri: string,
 ) {
   const mintTx = mintToCollectionV1(umi, {
     leafOwner: userAddr,
@@ -53,7 +51,7 @@ function mintToCollection(
     metadata: {
       name: eventName,
       symbol: "",
-      uri: metadataURL,
+      uri: nftUri,
       sellerFeeBasisPoints: 500,
       collection: {
         key: publicKey(collectionMint),
@@ -82,6 +80,7 @@ export const POST = async (req: NextRequest) => {
     collectionNFTAddr,
     toUserAddr,
     eventName,
+    nftUri,
   } = await req.json();
 
   if (
@@ -89,7 +88,8 @@ export const POST = async (req: NextRequest) => {
     !merkleTreeAddr ||
     !collectionNFTAddr ||
     !toUserAddr ||
-    !eventName
+    !eventName ||
+    !nftUri
   ) {
     return new Response("Invalid parameters", {
       status: 400,
@@ -115,10 +115,11 @@ export const POST = async (req: NextRequest) => {
     mintToCollection(
       umi,
       publicKey(creatorAddress!),
-      eventName!,
+      eventName,
       publicKey(toUserAddr!),
       merkleTree.publicKey,
       publicKey(collectionNFTAddr!),
+      nftUri,
     ),
   );
 

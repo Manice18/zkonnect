@@ -1,5 +1,5 @@
 {
-  "address": "Cse1J9Q4QkfCtjTN9629PgCbTzfug4xfSoKExL83aANh",
+  "address": "D57msu1skRML54zj1pfZ2fzewCx9UPveeT29hys94jrk",
   "metadata": {
     "name": "zkonnect",
     "version": "0.1.0",
@@ -101,6 +101,10 @@
         },
         {
           "name": "location",
+          "type": "string"
+        },
+        {
+          "name": "nfturi",
           "type": "string"
         },
         {
@@ -350,6 +354,10 @@
           },
           {
             "name": "location",
+            "type": "string"
+          },
+          {
+            "name": "nfturi",
             "type": "string"
           },
           {

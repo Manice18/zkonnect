@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/zkonnect.json`.
  */
 export type Zkonnect = {
-  address: "Cse1J9Q4QkfCtjTN9629PgCbTzfug4xfSoKExL83aANh";
+  address: "D57msu1skRML54zj1pfZ2fzewCx9UPveeT29hys94jrk";
   metadata: {
     name: "zkonnect";
     version: "0.1.0";
@@ -107,6 +107,10 @@ export type Zkonnect = {
         },
         {
           name: "location";
+          type: "string";
+        },
+        {
+          name: "nfturi";
           type: "string";
         },
         {
@@ -472,6 +476,10 @@ export type Zkonnect = {
           },
           {
             name: "location";
+            type: "string";
+          },
+          {
+            name: "nfturi";
             type: "string";
           },
           {

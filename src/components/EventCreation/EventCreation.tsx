@@ -97,7 +97,7 @@ const EventCreation = () => {
         const formData = new FormData();
         // formData.append("file", values.bannerUrl[0]);
         formData.set("file", values.bannerUrl[0]);
-        fetch("/api/ipfsUpload", {
+        fetch("/api/ipfsUpload?fileType=image", {
           method: "POST",
           body: formData,
         })
@@ -118,19 +118,35 @@ const EventCreation = () => {
                 wallet.publicKey!.toString(),
               );
 
-              const response = await fetch(
-                `/api/createCollectionNft/?eventName=${values.eventName}&creatorAddress=${wallet.publicKey!.toString()}`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    creatorAddress: wallet.publicKey!.toString(),
-                    eventName: values.eventName,
-                  }),
+              const jsonUpload = await fetch("/api/ipfsUpload?fileType=json", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
                 },
-              );
+                body: JSON.stringify({
+                  eventName: values.eventName,
+                  creatorName: creatorName,
+                  description: values.eventDescription,
+                  image: bannerUrl,
+                  meetLink: values.location,
+                  date: values.eventDate.toLocaleDateString(),
+                }),
+              });
+              const jsonUploadResponse = await jsonUpload.json();
+
+              const nftUri = `https://pink-magnetic-panther-830.mypinata.cloud/ipfs/${jsonUploadResponse.IpfsHash}`;
+
+              const response = await fetch(`/api/createCollectionNft`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  creatorAddress: wallet.publicKey!.toString(),
+                  eventName: values.eventName,
+                  nftUri: nftUri,
+                }),
+              });
               const collectionNftAddr = await response.json();
 
               await createTheEvent({
@@ -141,6 +157,7 @@ const EventCreation = () => {
                 bannerUrl: bannerUrl,
                 dateTime: values.eventDate.getTime(),
                 location: values.location,
+                nftUri: nftUri,
                 ticketPrice: values.ticketPrice,
                 totalTickets: values.totalTickets,
                 tokenType: values.nativePaymentToken,
