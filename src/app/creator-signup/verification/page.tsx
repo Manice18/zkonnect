@@ -1,9 +1,4 @@
-import Link from "next/link";
-
-import { MoveRight } from "lucide-react";
-
 import { constructMetaData } from "@/lib/metadata";
-import { Button } from "@/components/ui/button";
 import ProvidersComponent from "./_components/provider";
 
 export const metadata = constructMetaData({

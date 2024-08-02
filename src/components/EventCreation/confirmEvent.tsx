@@ -1,7 +1,11 @@
+import { useState } from "react";
+import Image from "next/image";
+
+import { MoveRight } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -10,10 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { CircleCheck, MoveRight } from "lucide-react";
 import { ConfirmPreview } from "./confirmPreview";
-import Image from "next/image";
-import { useState } from "react";
 
 export function ConfirmEvent({
   onConfirm,

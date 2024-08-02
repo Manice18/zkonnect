@@ -29,7 +29,6 @@ const ProvidersComponent = () => {
 
   const [requestUrl, setRequestUrl] = useState<string>();
   const [verfied, setVerified] = useState<Verified>({ states: "unverified" });
-  const [providerName, setProviderName] = useState<string>("");
   const [providerImageUrl, setProviderImageUrl] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [eventSource, setEventSource] = useState<EventSource | null>(null);
@@ -43,7 +42,6 @@ const ProvidersComponent = () => {
   }) => {
     if (!isOpen) {
       setIsOpen(true);
-      setProviderName(socialType);
       setProviderImageUrl(imageUrl);
       if (!publicKey || !connected) {
         toast.error("Please connect your wallet first");
@@ -148,7 +146,6 @@ const ProvidersComponent = () => {
         {isOpen && (
           <QRDialog
             requestUrl={requestUrl}
-            providerName={providerName}
             isOpen={isOpen}
             providerImage={providerImageUrl}
             setIsOpen={closeDialog}

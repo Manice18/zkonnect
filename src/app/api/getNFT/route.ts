@@ -123,11 +123,16 @@ export const POST = async (req: NextRequest) => {
     ),
   );
 
-  const tx = await transactionBuilder()
-    .add(mintInstructions)
-    .sendAndConfirm(umi);
+  try {
+    await transactionBuilder().add(mintInstructions).sendAndConfirm(umi);
 
-  return new Response("Success", {
-    status: 200,
-  });
+    return new Response("Success", {
+      status: 200,
+    });
+  } catch (err) {
+    console.log(err);
+    return new Response("Error", {
+      status: 400,
+    });
+  }
 };

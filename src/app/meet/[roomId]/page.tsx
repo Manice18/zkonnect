@@ -221,7 +221,7 @@ export default function Page() {
                               `/api/startRecording?roomId=${params.roomId}`,
                             );
 
-                        const data = await status.json();
+                        await status.json();
                         setIsRecording(!isRecording);
                       }}
                     >

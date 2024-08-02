@@ -14,14 +14,12 @@ import {
 export function QRDialog({
   children,
   requestUrl,
-  providerName,
   providerImage,
   isOpen,
   setIsOpen,
 }: {
   children?: React.ReactNode;
   requestUrl: any;
-  providerName: string;
   providerImage: string;
   isOpen: boolean | undefined;
   setIsOpen: (value: boolean) => void;

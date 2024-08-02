@@ -220,6 +220,7 @@ export const POST = async (req: Request) => {
         headers: ACTIONS_CORS_HEADERS,
       });
     } catch (err) {
+      console.log(err);
       return new Response('Invalid "account" provided', {
         status: 400,
         headers: ACTIONS_CORS_HEADERS,

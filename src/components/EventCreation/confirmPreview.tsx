@@ -26,9 +26,10 @@ export function ConfirmPreview({
   const [isOpen, setIsOpen] = useState(false);
   const [copiedBlink, setCopiedBlink] = useState<boolean>(false);
   const [copiedMeet, setCopiedMeet] = useState<boolean>(false);
-  const [meetUrl, setMeetUrl] = useState<string>(
-    "https://zkonnect.vercel.app/meet",
-  );
+  // const [meetUrl, setMeetUrl] = useState<string>(
+  //   "https://zkonnect.vercel.app/meet",
+  // );
+  const meetUrl = "https://zkonnect.vercel.app/meet";
 
   const onCopy = (url: string, setCopied: (value: boolean) => void) => {
     navigator.clipboard.writeText(url);

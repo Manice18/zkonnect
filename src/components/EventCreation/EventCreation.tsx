@@ -12,10 +12,6 @@ import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { mplBubblegum } from "@metaplex-foundation/mpl-bubblegum";
-import {
-  Metaplex,
-  walletAdapterIdentity as waAI,
-} from "@metaplex-foundation/js";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 
 import { cn } from "@/lib/utils";
@@ -60,9 +56,6 @@ const EventCreation = () => {
   );
   const umi = createUmi(connection).use(mplBubblegum());
   umi.use(walletAdapterIdentity(wallet));
-
-  const metaplex = new Metaplex(connection);
-  metaplex.use(waAI(wallet));
 
   const { createTheEvent, closeAccount, getAllCreatorAccounts } = useZkonnect();
 
@@ -425,7 +418,7 @@ const EventCreation = () => {
               .then(() => {
                 toast.success("Account closed successfully");
               })
-              .catch((e) => {
+              .catch(() => {
                 toast.error("Error closing account");
               });
           }}

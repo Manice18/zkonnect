@@ -10,7 +10,6 @@ import { createTree } from "@metaplex-foundation/mpl-bubblegum";
 import {
   generateSigner,
   publicKey,
-  Umi,
   keypairIdentity,
 } from "@metaplex-foundation/umi";
 

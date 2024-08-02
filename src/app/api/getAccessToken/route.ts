@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
   ).use(mplBubblegum());
   umi.use(dasApi());
   const rpcAssetList = await umi.rpc.getAssetsByOwner({
-    // @ts-ignore
+    // @ts-expect-error: owner is not defined in the type
     owner: new PublicKey(address),
   });
 
