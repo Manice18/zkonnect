@@ -45,6 +45,7 @@ import { useZkonnect } from "@/hooks/useZkonnect";
 import UploadDropzone from "@/components/Common/UploadDropzone";
 import { getCreatorDataAction } from "@/actions";
 import { ConfirmEvent } from "./confirmEvent";
+import { usePreview } from "@/hooks/use-preview";
 
 type EventCreationFormSchemaType = z.infer<typeof eventCreationFormSchema>;
 
@@ -58,6 +59,9 @@ const EventCreation = () => {
   umi.use(walletAdapterIdentity(wallet));
 
   const { createTheEvent, closeAccount, getAllCreatorAccounts } = useZkonnect();
+
+  const toggle = usePreview((store) => store.toggle);
+  const isOpen = usePreview((store) => store.isPreviewOpen);
 
   const [allEvents, setAllEvents] = useState<any>([]);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -161,6 +165,7 @@ const EventCreation = () => {
           })
           .then(() => {
             resolve();
+            toggle();
           })
           .catch((error) => reject(error));
       });

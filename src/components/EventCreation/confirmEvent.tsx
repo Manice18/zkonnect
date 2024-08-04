@@ -41,19 +41,17 @@ export function ConfirmEvent({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [blinkUrl, setBlinkUrl] = useState<string>();
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     onConfirm();
     setBlinkUrl(
       `${window.location.origin}/api/actions/support?eventName=${eventName}&address=${walletAddr}`,
     );
-    setIsOpen((p: boolean) => !p);
   };
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           className="z-10 w-[150px] space-x-3 self-end px-7 py-6 text-sm"
-          onClick={() => setIsOpen((p: boolean) => !p)}
           disabled={disabled}
         >
           <span>Create</span>
@@ -96,7 +94,7 @@ export function ConfirmEvent({
               size="default"
               className="text-xs"
               onClick={() => {
-                setIsOpen((p: boolean) => !p);
+                setIsOpen((open: boolean) => !open);
               }}
             >
               Cancel

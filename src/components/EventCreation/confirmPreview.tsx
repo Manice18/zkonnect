@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { usePreview } from "@/hooks/use-preview";
 
 export function ConfirmPreview({
   onConfirm,
@@ -23,7 +24,8 @@ export function ConfirmPreview({
   bannerUrl: string;
   blinkUrl: string | undefined;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const toggle = usePreview((store) => store.toggle);
+  const isOpen = usePreview((store) => store.isPreviewOpen);
   const [copiedBlink, setCopiedBlink] = useState<boolean>(false);
   const [copiedMeet, setCopiedMeet] = useState<boolean>(false);
   // const [meetUrl, setMeetUrl] = useState<string>(
@@ -41,12 +43,12 @@ export function ConfirmPreview({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={toggle}>
       <DialogTrigger asChild>
         <Button
           onClick={() => {
+            toggle();
             onConfirm();
-            setIsOpen((p: boolean) => !p);
           }}
           size="default"
           className="text-xs"

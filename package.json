@@ -10,6 +10,16 @@
     "postinstall": "prisma generate",
     "prepare": "husky"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manice18/zkonnect.git"
+  },
+  "author": "Manice18",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Manice18/zkonnect/issues"
+  },
+  "homepage": "https://github.com/Manice18/zkonnect#readme",
   "dependencies": {
     "@coral-xyz/anchor": "^0.30.1",
     "@hookform/resolvers": "^3.6.0",
@@ -65,7 +75,8 @@
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.6",
