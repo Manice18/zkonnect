@@ -2,6 +2,12 @@ import {
   createCreatorAction,
   updateCreatorFollowers,
   getCreatorDataAction,
+  createEventAction,
 } from "./SubmitAction";
 
-export { createCreatorAction, updateCreatorFollowers, getCreatorDataAction };
+export {
+  createCreatorAction,
+  updateCreatorFollowers,
+  getCreatorDataAction,
+  createEventAction,
+};

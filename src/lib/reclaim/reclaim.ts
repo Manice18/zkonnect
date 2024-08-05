@@ -1,13 +1,11 @@
 const fetchVerificationData = async (
   onRequestUrlReceived: (url: string) => void,
   provider: string,
-  onEventSourceReceived: (eventSource: EventSource) => void
+  onEventSourceReceived: (eventSource: EventSource) => void,
 ) => {
   return new Promise((resolve, reject) => {
     const eventSource = new EventSource(
-      process.env.NEXT_PUBLIC_ENVIRONMENT === "localhost"
-        ? `http://localhost:3000/api/reclaim?provider=${provider.toLowerCase()}`
-        : `https://zkonnect.vercel.app/api/reclaim?provider=${provider.toLowerCase()}`
+      `${window.location.origin}/api/reclaim?provider=${provider.toLowerCase()}`,
     );
 
     onEventSourceReceived(eventSource);

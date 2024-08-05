@@ -46,5 +46,24 @@ export async function getCreatorDataAction(walletAddress: string) {
   return {
     creatorName: data?.creatorName,
     creatorDomain: data?.domainOfExpertise,
+    isVerified: data?.isVerified,
+    creatorId: data?.id,
   };
+}
+
+export async function createEventAction(values: any) {
+  await db.events.create({
+    data: {
+      eventName: values.eventName,
+      eventDesc: values.eventDescription,
+      eventBanner: values.eventBanner,
+      eventDate: values.eventDate,
+      blink: values.blink,
+      meetLink: values.meetLink,
+      creatorId: values.creatorId,
+      nativeToken: values.nativeToken,
+      ticketPrice: values.ticketPrice,
+      totalTickets: values.totalTickets,
+    },
+  });
 }

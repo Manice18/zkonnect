@@ -43,7 +43,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useZkonnect } from "@/hooks/useZkonnect";
 import UploadDropzone from "@/components/Common/UploadDropzone";
-import { getCreatorDataAction } from "@/actions";
+import { createEventAction, getCreatorDataAction } from "@/actions";
 import { ConfirmEvent } from "./confirmEvent";
 import { usePreview } from "@/hooks/use-preview";
 
@@ -92,7 +92,6 @@ const EventCreation = () => {
       let promise: Promise<void>;
       promise = new Promise<void>((resolve, reject) => {
         const formData = new FormData();
-        // formData.append("file", values.bannerUrl[0]);
         formData.set("file", values.bannerUrl[0]);
         fetch("/api/ipfsUpload?fileType=image", {
           method: "POST",
@@ -111,9 +110,8 @@ const EventCreation = () => {
               }),
             });
             await createMerkle.json().then(async (merkleTreeAddr) => {
-              const { creatorDomain, creatorName } = await getCreatorDataAction(
-                wallet.publicKey!.toString(),
-              );
+              const { creatorDomain, creatorName, creatorId } =
+                await getCreatorDataAction(wallet.publicKey!.toString());
 
               const jsonUpload = await fetch("/api/ipfsUpload?fileType=json", {
                 method: "POST",
@@ -161,6 +159,19 @@ const EventCreation = () => {
                 collectionNft: collectionNftAddr.mint,
                 merkleTreeAddr: new PublicKey(merkleTreeAddr.merkleTreeAddr),
               });
+
+              await createEventAction({
+                eventName: values.eventName,
+                eventDescription: values.eventDescription,
+                eventBanner: bannerUrl,
+                eventDate: values.eventDate,
+                blink: `${window.location.origin}/api/actions/support?eventName=${values.eventName}&address=${wallet.publicKey!.toString()}`,
+                meetLink: values.location,
+                creatorId: creatorId,
+                nativeToken: values.nativePaymentToken,
+                ticketPrice: values.ticketPrice,
+                totalTickets: values.totalTickets,
+              });
             });
           })
           .then(() => {
@@ -198,7 +209,7 @@ const EventCreation = () => {
                 <Input
                   placeholder="Eg. An Online Event - By John Doe"
                   {...field}
-                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
+                  className="h-[40px] w-full rounded-md text-black transition-all dark:text-white"
                 />
               </FormControl>
               <FormDescription>
@@ -220,7 +231,7 @@ const EventCreation = () => {
                 <Input
                   placeholder="Eg. A description of the event"
                   {...field}
-                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
+                  className="h-[40px] w-full rounded-md text-black transition-all dark:text-white"
                 />
               </FormControl>
               <FormDescription>
@@ -306,33 +317,11 @@ const EventCreation = () => {
                 <Input
                   placeholder="Eg. https://example.com/banner.jpg"
                   {...field}
-                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
+                  className="h-[40px] w-full rounded-md text-black transition-all dark:text-white"
                 />
               </FormControl>
               <FormDescription>
                 The location of the event you want to create
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="ticketPrice"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-medium text-black">
-                Ticket Price
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Eg. 2"
-                  {...field}
-                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
-                />
-              </FormControl>
-              <FormDescription>
-                The price of the ticket for the event you want to create
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -350,7 +339,7 @@ const EventCreation = () => {
                 <Input
                   placeholder="Eg. 100"
                   {...field}
-                  className="h-[50px] w-full rounded-md text-black transition-all dark:text-white"
+                  className="h-[40px] w-full rounded-md text-black transition-all dark:text-white"
                 />
               </FormControl>
               <FormDescription>
@@ -361,47 +350,74 @@ const EventCreation = () => {
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name="nativePaymentToken"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Native Payment Token</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+        <div className="flex space-x-4">
+          <FormField
+            control={form.control}
+            name="ticketPrice"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-medium text-black">
+                  Ticket Price
+                </FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a token" />
-                  </SelectTrigger>
+                  <Input
+                    placeholder="Eg. 2"
+                    {...field}
+                    className="h-[40px] w-full rounded-md text-black transition-all dark:text-white"
+                  />
                 </FormControl>
-                <SelectContent>
-                  <SelectItem value="USDC">
-                    <div className="flex items-center space-x-2">
-                      <Avatar className="size-7">
-                        <AvatarImage src="https://coin-images.coingecko.com/coins/images/6319/large/usdc.png?1696506694" />
-                        <AvatarFallback>USDC</AvatarFallback>
-                      </Avatar>
-                      <span>USDC</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="SOL">
-                    <div className="flex items-center space-x-2">
-                      <Avatar className="size-7">
-                        <AvatarImage src="https://assets.coingecko.com/coins/images/4128/standard/solana.png?1718769756" />
-                        <AvatarFallback>SOL</AvatarFallback>
-                      </Avatar>
-                      <span>SOL</span>
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                The native payment token you want to users to pay
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormDescription>
+                  The price of the ticket for the event you want to create
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nativePaymentToken"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Native Payment Token</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a token" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="USDC">
+                      <div className="flex items-center space-x-2">
+                        <Avatar className="size-7">
+                          <AvatarImage src="https://coin-images.coingecko.com/coins/images/6319/large/usdc.png?1696506694" />
+                          <AvatarFallback>USDC</AvatarFallback>
+                        </Avatar>
+                        <span>USDC</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="SOL">
+                      <div className="flex items-center space-x-2">
+                        <Avatar className="size-7">
+                          <AvatarImage src="https://assets.coingecko.com/coins/images/4128/standard/solana.png?1718769756" />
+                          <AvatarFallback>SOL</AvatarFallback>
+                        </Avatar>
+                        <span>SOL</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  The native payment token you want to users to pay
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <ConfirmEvent
           disabled={!isValid}
           onConfirm={form.handleSubmit(onSubmit)}
@@ -416,7 +432,7 @@ const EventCreation = () => {
           }
           walletAddr={wallet.publicKey?.toString()}
         />
-        <label
+        {/* <label
           className="cursor-pointer rounded-md bg-black p-2 text-center text-white"
           onClick={() => {
             closeAccount(allEvents[0].account.eventName)
@@ -434,11 +450,12 @@ const EventCreation = () => {
           className="cursor-pointer rounded-md bg-black p-2 text-center text-white"
           onClick={async () => {
             const data = await getAllCreatorAccounts();
+
             setAllEvents(data);
           }}
         >
           Get all
-        </label>
+        </label> */}
       </form>
     </Form>
   );

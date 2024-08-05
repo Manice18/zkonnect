@@ -7,14 +7,24 @@ import { useRouter } from "next/navigation";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 import WalletConnectButton from "@/components/Wallet/wallet-connect-button";
+import { getCreatorDataAction } from "@/actions";
 
 export default function Home() {
   const { connected, publicKey } = useWallet();
   const router = useRouter();
 
+  const isCreatorVerified = async (pubKey: string) => {
+    const { isVerified } = await getCreatorDataAction(pubKey);
+
+    if (isVerified === true) {
+      return router.push("/creator-dashboard");
+    }
+    return router.push("/creator-signup");
+  };
+
   useEffect(() => {
     if (connected && publicKey) {
-      router.push("/creator-signup");
+      isCreatorVerified(publicKey.toString());
     }
   }, [publicKey, connected]);
   return (
