@@ -4,9 +4,13 @@ WORKDIR /app
 
 COPY package.json ./
 
+COPY package-lock.json ./
+
 COPY prisma ./prisma
 
 RUN npm install
+
+RUN npm run postinstall
 
 COPY . .
 
@@ -34,8 +38,5 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT=3000
-
-COPY .env .env
-RUN export $(cat .env | xargs)
 
 CMD HOSTNAME="0.0.0.0" node server.js
