@@ -29,9 +29,9 @@ export function ConfirmPreview({
   const [copiedBlink, setCopiedBlink] = useState<boolean>(false);
   const [copiedMeet, setCopiedMeet] = useState<boolean>(false);
   // const [meetUrl, setMeetUrl] = useState<string>(
-  //   "https://zkonnect.vercel.app/meet",
+  //   "https://zkonnect.social/meet",
   // );
-  const meetUrl = "https://zkonnect.vercel.app/meet";
+  const meetUrl = "https://zkonnect.social/meet";
 
   const onCopy = (url: string, setCopied: (value: boolean) => void) => {
     navigator.clipboard.writeText(url);
@@ -90,7 +90,7 @@ export function ConfirmPreview({
                 readOnly
                 onClick={() =>
                   onCopy(
-                    blinkUrl || "https://zkonnect.vercel.app/meet",
+                    blinkUrl || "https://zkonnect.social/meet",
                     setCopiedBlink,
                   )
                 }
@@ -101,7 +101,7 @@ export function ConfirmPreview({
                 className="h-full px-3"
                 onClick={() =>
                   onCopy(
-                    blinkUrl || "https://zkonnect.vercel.app/meet",
+                    blinkUrl || "https://zkonnect.social/meet",
                     setCopiedBlink,
                   )
                 }

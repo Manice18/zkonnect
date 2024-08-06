@@ -4,7 +4,7 @@ export function constructMetaData({
   title = "zKonnect",
   description = "Your web3 dapp for effortless event creation and participation!",
   image = "/thumbnail.png", // put a thumbnail.png in public folder, resolution 1200x630
-  authors = { name: "zKonnect team", url: "https://zkonnect.vercel.app/" },
+  authors = { name: "zKonnect team", url: "https://zkonnect.social/" },
   creator = "zKonnect team",
   generator = "Next.js",
   publisher = "zKonnect team",
@@ -58,7 +58,7 @@ export function constructMetaData({
         },
       ],
     },
-    metadataBase: new URL("https://zkonnect.vercel.app/"),
+    metadataBase: new URL("https://zkonnect.social/"),
     robots,
   };
 }

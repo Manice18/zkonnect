@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
           name: `${eventName} | ${creatorName}`,
           description: description,
           image: image,
-          external_url: "https://zkonnect.vercel.app",
+          external_url: "https://zkonnect.social",
           attributes: [
             {
               trait_type: "Meet Link",

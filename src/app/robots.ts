@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/api/reclaim/",
     },
-    sitemap: "https://zkonnect.vercel.app/sitemap.xml",
+    sitemap: "https://zkonnect.social/sitemap.xml",
   };
 }
 
@@ -18,4 +18,4 @@ export default function robots(): MetadataRoute.Robots {
 // User-Agent: *
 // Allow: /
 // Disallow: /api/reclaim/
-// Sitemap: https://zkonnect.vercel.app/sitemap.xml
+// Sitemap: https://zkonnect.social/sitemap.xml
