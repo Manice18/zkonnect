@@ -68,11 +68,7 @@ export const GET = async (req: NextRequest) => {
     });
   } else {
     try {
-      const requestUrl = new URL(req.url);
-      const baseHref = new URL(
-        `/api/actions/support?eventAccountPda=${profilePda.toString()}`,
-        requestUrl.origin,
-      ).toString();
+      const baseHref = `https://zkonnect.social/api/actions/support?eventAccountPda=${profilePda.toString()}`;
 
       let actualPrice;
 
