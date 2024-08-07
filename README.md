@@ -16,13 +16,19 @@ It uses **Huddle01SDK** for token-gated rooms and **Reclaim Protocol** to get a 
 - **Audience Engagement**: Interactive features to enhance the event experience for attendees.
 - **AI Integration** : We aim to provide fastest possible event organization experience to the user with AI chatbot to extract event data from the user's chat to directly create an event.
 
+## Working Architecture
+
+![zkonnect architecture](https://github.com/user-attachments/assets/22982496-b7f3-453f-b770-0b55e0b27538)
+
 ## Technology Stack
 
 - Built on Solana
-- In-App Currency: Blinks
+- Solana Actions
+- Reclaim Protocol
+- Huddle01SDK
 - NFT Standard: Solana NFT standard (Metaplex)
 - Next.js
-- DialogflowCX
+- Rust (for smart contract)
 
 ## What's new with Blinks?
 
@@ -39,8 +45,10 @@ It uses **Huddle01SDK** for token-gated rooms and **Reclaim Protocol** to get a 
 
 ### Blink Working proof:
 
-- [Dial.to](https://dial.to/?action=solana-action%3Ahttps%3A%2F%2Fzkonnect.vercel.app%2Fapi%2Factions%2Fsupport%3FeventName%3DAn%20online%20event%26address%3D8SxxZLiRpQT4WAk4kg1VyfbEvraKJj6DamfZJJoMQtKG)
-<br/><img width="646" alt="image" src="https://github.com/user-attachments/assets/4b6e64fd-a0f2-4415-8dd2-fc72ae1cd501">
+- Creator Verification, event creation and user paying and getting cNFT ticket in return: [Working Video][https://drive.google.com/file/d/1qPSJkLXxem7EQYWqD4ZfNI1-Zj0k9cxw/view]
+
+- [Dial.to](https://dial.to/devnet?action=solana-action%3Ahttps%3A%2F%2Fzkonnect.social%2Fapi%2Factions%2Fsupport%3FeventName%3Da%2520comedy%2520show%26address%3D9aYZU8Ed6cfHbqQNHXtjXLqPsLq1p9ft7Wv6n3vYHZFN)
+<br/><img width="578" alt="image" src="https://github.com/user-attachments/assets/dd152f40-8f87-4373-9489-1694e59066ca">
 
 
 ### Prerequisites
@@ -77,7 +85,3 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
