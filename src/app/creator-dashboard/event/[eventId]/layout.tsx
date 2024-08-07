@@ -1,12 +1,9 @@
-import Navbar from "@/components/Common/Navbar";
-
-const EventPageLayout = ({ children }: { children: React.ReactNode }) => {
+const EventLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-full">
-      <Navbar requireLogo />
+    <div className="h-screen">
       <main className="h-screen bg-zkonnect-white-origin">{children}</main>
     </div>
   );
 };
 
-export default EventPageLayout;
+export default EventLayout;

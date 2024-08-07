@@ -79,7 +79,7 @@ export function ConfirmEvent({
             width={208}
             height={208}
             alt="event banner"
-            className="size-52 bg-red-300"
+            className="size-52 bg-[#FF6D4D]"
           />
         </div>
         <DialogFooter className="sm:justify-start">

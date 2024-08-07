@@ -1,13 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CircleCheck, MoveRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Copy } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import Image from "next/image";
 import { CalendarIcon, LinkIcon, EyeIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 interface EventPageProps {
   params: {
@@ -25,6 +28,23 @@ interface EventPageProps {
 }
 
 export default function EventPage({ params }: EventPageProps) {
+  const [copiedBlink, setCopiedBlink] = useState<boolean>(false);
+  const [copiedMeet, setCopiedMeet] = useState<boolean>(false);
+  const [blinkUrl, setBlinkUrl] = useState<string>(
+    "https://zkonnect.blinks.com/event",
+  );
+  const [meetUrl, setMeetUrl] = useState<string>(
+    "https://zkonnect.meet.com/id",
+  );
+
+  const onCopy = (url: string, setCopied: (value: boolean) => void) => {
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+  };
   return (
     <div className="container mx-auto mt-8 p-4">
       <Card className="w-full">
@@ -43,54 +63,135 @@ export default function EventPage({ params }: EventPageProps) {
               <h3 className="mb-4 text-2xl font-bold">Description</h3>
               <p className="mb-8">{params.desc}</p>
 
-              <h3 className="mb-2 text-xl font-bold">Ticket Details</h3>
-              <p className="mb-2 text-gray-600">Here's the detailed listing:</p>
-              <div className="mb-8 grid grid-cols-3 gap-4">
-                <div>
-                  <p className="font-bold">Price</p>
-                  <p>{params.price}</p>
+              <div className="mb-4 border p-4">
+                <div className="mb-4 flex items-center">
+                  <Image
+                    src="/assets/ticket-icon.svg"
+                    width={20}
+                    height={20}
+                    alt="ticket-icon"
+                    className="mr-4"
+                  />
+                  <h5 className="font-bold">Ticket Details</h5>
                 </div>
-                <div>
-                  <p className="font-bold">Total ticket</p>
-                  <p>{params.totalTickets}</p>
-                </div>
-                <div>
-                  <p className="font-bold">Token Type</p>
-                  <p>{params.tokenType}</p>
+                <p className="mb-4 text-gray-600">
+                  Here's the detailed listing:
+                </p>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="rounded-lg bg-[#F8F8F8] p-3">
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold">Price</p>
+                      <p>{params.price}200</p>
+                    </div>
+                  </div>
+                  <div className="rounded-lg bg-[#F8F8F8] p-3">
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold">Total ticket</p>
+                      <p>{params.totalTickets} 50</p>
+                    </div>
+                  </div>
+                  <div className="rounded-lg bg-[#F8F8F8] p-3">
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold">Token Type</p>
+                      <div className="flex items-center space-x-2">
+                        <Avatar className="size-7">
+                          <AvatarImage src="https://assets.coingecko.com/coins/images/4128/standard/solana.png?1718769756" />
+                          <AvatarFallback>SOL</AvatarFallback>
+                        </Avatar>
+                        <span>SOL</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <h3 className="mb-2 text-xl font-bold">Meeting Link</h3>
-              <div className="mb-4 flex items-center">
-                <Input value={params.meetingLink} readOnly />
-                <Button variant="outline" size="icon" className="ml-2">
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <h3 className="mb-2 text-xl font-bold">Blink</h3>
-              <div className="flex items-center">
-                <Input value={params.blinkLink} readOnly />
-                <Button variant="outline" size="icon" className="ml-2">
-                  <Copy className="h-4 w-4" />
-                </Button>
+              <div className="w-1/2 gap-2 border p-2">
+                <div className="mb-2 flex items-center space-x-2">
+                  <div className="grid flex-1 gap-2">
+                    <Label
+                      htmlFor="meet-link"
+                      className="mb-1 flex items-center"
+                    >
+                      <Image
+                        src="/assets/meet-icon.svg"
+                        width={20}
+                        height={20}
+                        alt="meet-icon"
+                        className="mr-2"
+                      />
+                      <span>Meeting Link</span>
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="meet-link"
+                        value={meetUrl}
+                        readOnly
+                        onClick={() => onCopy(meetUrl, setCopiedMeet)}
+                      />
+                      <Button
+                        type="submit"
+                        size="sm"
+                        className="h-full bg-[#808080] px-3"
+                        onClick={() => onCopy(meetUrl, setCopiedMeet)}
+                        disabled={copiedMeet}
+                      >
+                        <span className="sr-only">Copy</span>
+                        {copiedMeet ? <Check size={20} /> : <Copy size={20} />}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-2 flex items-center space-x-2">
+                  <div className="grid flex-1 gap-2">
+                    <Label
+                      htmlFor="blink-link"
+                      className="mb-1 flex items-center"
+                    >
+                      <Image
+                        src="/assets/blink-icon.svg"
+                        width={20}
+                        height={20}
+                        alt="blink-icon"
+                        className="mr-2"
+                      />
+                      <span>Blink</span>
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="blink-link"
+                        value={blinkUrl}
+                        readOnly
+                        onClick={() => onCopy(blinkUrl, setCopiedBlink)}
+                      />
+                      <Button
+                        type="submit"
+                        size="sm"
+                        className="h-full bg-[#808080] px-3"
+                        onClick={() => onCopy(blinkUrl, setCopiedBlink)}
+                        disabled={copiedBlink}
+                      >
+                        <span className="sr-only">Copy</span>
+                        {copiedBlink ? <Check size={20} /> : <Copy size={20} />}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="w-1/3">
+            <div className="mx-auto w-1/4 border p-3">
               <h3 className="mb-4 text-2xl font-bold">Event Banner</h3>
               <div className="w-54 h-64 rounded-lg bg-[#FF6D4D]"></div>
             </div>
           </div>
+          <div className="mt-4 flex justify-end">
+            <Button className="space-x-6 bg-black px-6 py-6 text-sm">
+              <CircleCheck size={20} />
+              <span>Cancel Event</span>
+            </Button>
+          </div>
         </CardContent>
       </Card>
-
-      <div className="mt-4 flex justify-end">
-        <Button className="space-x-6 bg-black px-6 py-6 text-sm">
-          <CircleCheck size={20} />
-          <span>Cancel Event</span>
-        </Button>
-      </div>
     </div>
   );
 }
