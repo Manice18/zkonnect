@@ -195,9 +195,7 @@ export const POST = async (req: Request) => {
         message: `Paid Successfully`,
       };
 
-      const url = new URL(req.url);
-
-      await fetch(`${url.origin}/api/getNFT`, {
+      await fetch('https://zkonnect.social/api/getNFT', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
